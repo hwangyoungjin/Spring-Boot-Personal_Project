@@ -1,4 +1,4 @@
-package my.springboot.demo;
+package my.springboot.myrest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
