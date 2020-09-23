@@ -11,7 +11,28 @@
     
     <div class="container">
         <h2>게시판</h2>
-    </div>
+        <div>총 건수 : <span th:text="${#lists.size(boards)}"></span></div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>번호</th>
+              <th>제목</th>
+              <th>작성자</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="board : ${boards}">
+              <td th:text="${board.id}">제목</td>
+              <td th:text="${board.title}">Hello World</td>
+              <td th:text="${board.content}">황영진</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- 속성 오른쪽으로 주는 class="text-right" 부트스트랩 클래스 이용 -->
+        <div class="text-right">
+          <button type="button" class="btn btn-primary">쓰기</button>
+        </div>
+      </div>
     
     <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
