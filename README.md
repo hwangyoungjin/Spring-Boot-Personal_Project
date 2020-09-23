@@ -15,9 +15,10 @@
 4. @RequestParam을 통해 url 요청 매개변수 받기
 
 [3. thymeleaf를 통해 레이아웃 만들기]
+---
 1. Bootstrap[반응형 웹 제작을 도와주는 프레임워크](https://gmlwjd9405.github.io/2018/05/02/bootstrap-download-and-setting.html)을 이용하여 반응형 웹 페이지 구성하기 **완료**
-	1.[기본템플릿](http://bootstrapk.com/getting-started/) 적용  - index.html
-	2.[기본템플릿 예제 적용](http://bootstrapk.com/examples/starter-template/)
+	1. [기본템플릿](http://bootstrapk.com/getting-started/) 적용  - index.html
+	2. [기본템플릿 예제 적용](http://bootstrapk.com/examples/starter-template/)
 	3. 2의 CSS 파일 추가	
 2. Fragment를 이용해서 공통 화면(**common.html**) 레이아웃 구성하기
 	1. templates/fragments/common.html을 추가하여 -> head와 body 공통부분처리 (th:fragment , th:replace 이용)
