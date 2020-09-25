@@ -62,3 +62,23 @@
 4. 게시판 데이터 조회 후 화면에 출력
 	1. bootstrap에서 [테이블 레이아웃](http://bootstrapk.com/examples/theme/) 이용
 	2. thymeleaf 리스트 이용
+	3. 버튼 url 연결 안됨 -> 태그변경(button->a)으로 [해결](https://ofcourse.kr/html-course/a-%ED%83%9C%EA%B7%B8) 
+
+[5. thymleaf에서 form 전송하기]
+---
+1. Spring Boot, thymeleaf를 이용해서 form 전송 방법 알아보기
+	1.form.html 작성 [참고](https://araikuma.tistory.com/75)
+	2.[thymeleaf form 핸들링](https://spring.io/guides/gs/handling-form-submission/)
+	3.get->form[스프링부트form](https://spring.io/guides/gs/handling-form-submission/), [button vs input](https://aboooks.tistory.com/301)->post
+	
+	<pre>
+	<code>
+	[**form에서 post 요청시 postMapping의 필드값이 null인 객체가 들어오는 문제 발생**]
+	1. textarea안에 값 modeldata로 바인딩 안됨 -> 원인 모르겠음
+	</code>
+	</pre>	
+
+2. form 유효값 체크할수 있는 Validator 작성하기
+
+3. JPA를 이용해서 DB에 데이터 추가, 수정
+
