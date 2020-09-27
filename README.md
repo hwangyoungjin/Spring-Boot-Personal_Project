@@ -1,6 +1,6 @@
 # Spring-boot-Personal_Project
 ## 스프링부트로 웹 출시하기
-## SpringBoot, thymeleaf, Bootstrap, JPA, MySQL, Spring Security
+## SpringBoot, thymeleaf, [Bootstrap](https://getbootstrap.com/docs/4.4/getting-started/introduction/), JPA, MySQL, Spring Security
 
 ---
 [1.Spring Boot 환경세팅]
@@ -16,10 +16,10 @@
 
 [3. thymeleaf를 통해 레이아웃 만들기]
 ---
-1. Bootstrap[반응형 웹 제작을 도와주는 프레임워크](https://gmlwjd9405.github.io/2018/05/02/bootstrap-download-and-setting.html)을 이용하여 반응형 웹 페이지 구성하기 **완료**
-	1. [기본템플릿](http://bootstrapk.com/getting-started/) 적용  - index.html
-	2. [기본템플릿 예제 적용](http://bootstrapk.com/examples/starter-template/)
-	3. 2의 CSS 파일 추가	
+1. Bootstrap[반응형 웹 제작을 도와주는 프레임워크](https://getbootstrap.com/)을 이용하여 반응형 웹 페이지 구성하기 **완료**
+	1. [기본템플릿](https://getbootstrap.com/docs/4.5/examples/starter-template/) 적용  - index.html
+	2. [기본템플릿 예제 적용](https://getbootstrap.com/docs/4.5/examples/starter-template/)
+	3. 2의 [CSS 파일](https://getbootstrap.com/docs/4.5/examples/starter-template/starter-template.css) 추가	
 2. Fragment를 이용해서 공통 화면(**common.html**) 레이아웃 구성하기
 	1. templates/fragments/common.html을 추가하여 -> head와 body 공통부분처리 (th:fragment , th:replace 이용)
 	2. fragment의 parameter 이용하기 (ex. th:fragment="head(para)")
@@ -66,11 +66,10 @@
 
 [5. thymleaf에서 form 전송하기]
 ---
-1. Spring Boot, thymeleaf를 이용해서 form 전송 방법 알아보기
-	1.form.html 작성 [참고](https://araikuma.tistory.com/75)
-	2.[thymeleaf form 핸들링](https://spring.io/guides/gs/handling-form-submission/)
-	3.get->form[스프링부트form](https://spring.io/guides/gs/handling-form-submission/), [button vs input](https://aboooks.tistory.com/301)->post
-	
+1. Spring Boot, thymeleaf를 이용하여 form 전송 하고 JPA를 이용해서 DB에 데이터 추가, 수정
+	1. form.html 작성 [참고](https://araikuma.tistory.com/75)
+	2. [thymeleaf form 핸들링](https://spring.io/guides/gs/handling-form-submission/)
+	3. get->form[스프링부트form](https://spring.io/guides/gs/handling-form-submission/), [button vs input](https://aboooks.tistory.com/301)->post
 	<pre>
 	<code>
 	[**form에서 post 요청시 postMapping의 필드값이 null인 객체가 들어오는 문제 발생**]
@@ -78,7 +77,27 @@
 	</code>
 	</pre>	
 
-2. form 유효값 체크할수 있는 Validator 작성하기
+	4. 게시판 글 수정 
+		1. list.html에서 title 부분 [파라미터를 통해 링크연결](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
+		2. GETMapping (/form)에 파라미터 전달받기(@RequestParam 이용)
+		3. POSTMapping 에서 form.html에서 전달 한 model을 받아 key값으로 저장하기 때문에 controller에 key값을 전달하기 위해 form.html의 id값 hidden으로 전달 
 
-3. JPA를 이용해서 DB에 데이터 추가, 수정
+2. form 유효값 체크할수 있는 Validator 작성하기
+	1. [thymeleaf form Validating](https://spring.io/guides/gs/validating-form-input/)
+	2. 서버에서 클라이언트에서 보낸 데이터 체크 하기위해 VO객체(Board)에 @NotNull, @Size, @Valid 설정
+	- **@Size(message= "") 를 통해 에러메시지 설정**
+	<pre>
+	<code>
+	[**javax에 있는 @NotNull, @Size, @Valid import 안됨 **]
+	pom.xml [dependency추가로 해결](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation/2.3.3.RELEASE)
+	</code>
+	</pre>	
+
+	3. POSTMapping 에 @Valid, BindingResult 추가
+	4. form.html에서 [에러있는경우 에러값 표시할 코드 부트스트랩 Server side용](https://getbootstrap.com/docs/4.4/components/forms/#validation) 추가
+	5. 4과정 에 [thymeleaf 에러처리부분](https://spring.io/guides/gs/validating-form-input/) 함께 추가
+
+	6. 애노테이션이 아닌 Validator인터페이스를 통해 새로운 [Vaildator클래스](https://lazymankook.tistory.com/86) (BoardValidator) 만들기  
+
+
 

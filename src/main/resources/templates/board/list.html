@@ -23,7 +23,10 @@
           <tbody>
             <tr th:each="board : ${boards}">
               <td th:text="${board.id}">제목</td>
-              <td th:text="${board.title}">Hello World</td>
+              
+              <!-- 해당 td안에 있던 th:text가 <a>를 통해 묻힐 수 있기 때문에 <a>태그 안으로 넣고 -->
+              <!-- th:href를 통해 해당 text 클릭시 해당 객체의 id파라미터를 전달하면서 url로 이동 -->
+              <td ><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}">Hello World</a></td>
               <td th:text="${board.content}">황영진</td>
             </tr>
           </tbody>
@@ -34,9 +37,10 @@
         </div> 
       </div> 
     
-    <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요합니다) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- 모든 컴파일된 플러그인을 포함합니다 (아래), 원하지 않는다면 필요한 각각의 파일을 포함하세요 -->
-    <script src="js/bootstrap.min.js"></script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   </body>
 </html>
