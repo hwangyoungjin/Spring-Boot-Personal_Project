@@ -99,5 +99,9 @@
 
 	6. 애노테이션이 아닌 Validator인터페이스를 통해 새로운 [Vaildator클래스](https://lazymankook.tistory.com/86) (BoardValidator) 만들기  
 
+[6. JPA이용한 RESTful API 작성]
+---
+1. JPA이용해서 마리아DB의 데이터 조작할 수 있는 컨트롤러 생성
 
+2. PostMan을 이용해서 http요청을 통해 CURD 데이터 조작하기
 
