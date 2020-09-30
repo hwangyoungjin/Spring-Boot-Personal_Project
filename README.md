@@ -38,19 +38,17 @@
 	**JPA를 구현한 것중 가장 유명한 hibernate를 사용**
 	2. [mysql 의존성 추가](https://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.21)
 	3. application.properties에 mysql [데이터소스](http://blog.naver.com/PostView.nhn?blogId=ndarkness75&logNo=220991437798&categoryNo=0&parentCategoryNo=8&viewDate=&currentPage=1&postListTopCurrentPage=1&from=postView) 설정
-	<pre>
-	<code>
-	[**time zone 관련 에러**]
+	```java
+	[time zone 관련 에러]
 	java.sql.SQLException: The server time zone value '´ëÇÑ¹Î±¹ Ç¥ÁØ½Ã' is unrecognized or represents more than one time zone. 
 	You must configure either the server or JDBC driver (via the serverTimezone configuration property) to use a more specifc time zone value if you want to utilize time zone support.
-	[**원인 :  MySQL 버전 5.1.23보다 높은 버전을 사용하면 MySQL 타임존의 시간표현 포맷이 달라져서 connector 에서 인식을 하지 못한다**]
-	[**해결방법**](https://irerin07.tistory.com/14)
+	[원인 :  MySQL 버전 5.1.23보다 높은 버전을 사용하면 MySQL 타임존의 시간표현 포맷이 달라져서 connector 에서 인식을 하지 못한다]
+	[해결방법](https://irerin07.tistory.com/14)
 	1. mysql 데이터 소스 url 맨뒤에 "스키마이름?" 뒤에
 	useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 	추가
 	2. MySQL 버전을 5.1.23으로 낮추기
-	</code>
-	</pre>
+	```
 
 3. Model, Repository 클래스 생성 및 어노테이션 설정
 	1. Model (Board Class) 추가
@@ -70,12 +68,10 @@
 	1. form.html 작성 [참고](https://araikuma.tistory.com/75)
 	2. [thymeleaf form 핸들링](https://spring.io/guides/gs/handling-form-submission/)
 	3. get->form[스프링부트form](https://spring.io/guides/gs/handling-form-submission/), [button vs input](https://aboooks.tistory.com/301)->post
-	<pre>
-	<code>
-	[**form에서 post 요청시 postMapping의 필드값이 null인 객체가 들어오는 문제 발생**]
+	~~~html
+	[form에서 post 요청시 postMapping의 필드값이 null인 객체가 들어오는 문제 발생]
 	1. textarea안에 값 modeldata로 바인딩 안됨 -> 원인 모르겠음
-	</code>
-	</pre>	
+	~~~
 
 	4. 게시판 글 수정 
 		1. list.html에서 title 부분 [파라미터를 통해 링크연결](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
@@ -86,12 +82,10 @@
 	1. [thymeleaf form Validating](https://spring.io/guides/gs/validating-form-input/)
 	2. 서버에서 클라이언트에서 보낸 데이터 체크 하기위해 VO객체(Board)에 @NotNull, @Size, @Valid 설정
 	- **@Size(message= "") 를 통해 에러메시지 설정**
-	<pre>
-	<code>
-	[**javax에 있는 @NotNull, @Size, @Valid import 안됨 **]
+	```java
+	[javax에 있는 @NotNull, @Size, @Valid import 안됨]
 	pom.xml [dependency추가로 해결](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation/2.3.3.RELEASE)
-	</code>
-	</pre>	
+	```
 
 	3. POSTMapping 에 @Valid, BindingResult 추가
 	4. form.html에서 [에러있는경우 에러값 표시할 코드 부트스트랩 Server side용](https://getbootstrap.com/docs/4.4/components/forms/#validation) 추가
@@ -101,7 +95,27 @@
 
 [6. JPA이용한 RESTful API 작성]
 ---
-1. JPA이용해서 마리아DB의 데이터 조작할 수 있는 컨트롤러 생성
+1. JPA이용해서 MySQL DB의 데이터 조작할 수 있는 컨트롤러 생성
+	1. RestController 생성 [스프링 REST 튜토리얼 참고](https://spring.io/guides/tutorials/rest/)
+	2. @GET, @POST, @GET{id}, @PUT{id}, @DELETE{id}
+	3. @GET의 파라미터 '제목' 받아서 검색(타임리프 uilt.StringUtils 이용)
+		1. @RequestParam으로 title,content 받기
+		2. BoardRepository 수정 [Spring JAP 참고](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
+		```java
+		//JPA 규칙에 따라 인터페이스만 정의하면 JPA가 알아서 조회해준다.
 
-2. PostMan을 이용해서 http요청을 통해 CURD 데이터 조작하기
+		//title과 일치하는 데이터 반환
+		List<Board> findBytitle(String title);
+    
+		// title이나 content둘중 하나만 일치해도 데이터 반환
+		List<Board> findByTitleOrContent(String title, String content);
+		```
+		3. RestController에서 findByTitleOrContent(title,content)을 통해 해당하는 객체 json으로 반환
 
+2. [PostMan](https://www.postman.com/downloads/)을 이용해서 http요청을 통해 CRUD 데이터 조작하기
+	```JSON
+	1. C : POST -> url : localhost:8080/api/boards -> body : raw(JSON)으로  데이터 입력 후 **Send**
+	2. R : GET -> url : localhost:8080/api/boards -> **Send**
+	3. U : PUT -> url : <http://localhost:8080/api/boards/17> -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
+	4. D : DELETE -> url : <localhost:8080/api/boards/17> -> **Send**
+	```
