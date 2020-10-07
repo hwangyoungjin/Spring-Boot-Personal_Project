@@ -126,14 +126,14 @@
 	1. 게시판 글 수가 많아지면 처리할 페이지 처리(페이징)
 		1. [부트스트랩 Pagnation](https://getbootstrap.com/docs/4.4/components/pagination/#overview)
 		2. DB 모든데이터 page로 다 가져오기[Spring Data JAP-pageable](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
-		``java
+		```java
 		// 첫 번째 방법
 		// page는 0번 시작하며 page안에 데이터 개수는 20개로 지정
 		public String list(Model model, Pageable pageable){
         			Page<Board> boards = boardRepository.findAll(PageRequest.of(0,10));
         			model.addAttribute("boards",boards);
 			return "board/list";
-		
+		}
 		// 두 번째 방법
 		// 파라미터로 받아서 url로 페이지 번호, 개수 받기
 		// http://localhost:8080/board/list?page=1&size=10
@@ -143,7 +143,7 @@
         			model.addAttribute("boards",boards);
 			return "board/list";
  		}
-		``
+		```
 		3. [page버튼의 index값 Conteroller에서 받아오기](https://stackoverflow.com/questions/40007190/thymeleaf-loop-until-a-number)
 		4. index를 이용해서 해당 페이지 인 경우 버튼 diable - th:classappend
 		5. [page버튼 파라미터받아서 url 넣기- th:href]()
