@@ -5,13 +5,15 @@
   </head> 
 
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top" th:replace="fragments/common :: menu('board')">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu('board')">
         
     </nav>
     
     <div class="container">
         <h2>게시판</h2>
-        <div>총 건수 : <span th:text="${#lists.size(boards)}"></span></div>
+        <!-- boards.getTotalElements() 메서드를 thymeleaf에서 호출 -->
+        <!-- 'get'을 제거하여 boards.totalElements으로 호출 시 타임리프가 알아서 호출해준다.  -->
+        <div>총 건수 : <span th:text="${boards.totalElements}"></span></div>
         <table class="table">
           <thead>
             <tr>
@@ -31,6 +33,28 @@
             </tr>
           </tbody>
         </table>
+
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${1==boards.pageable.pageNumber + 1 } ? 'disabled'">
+              <!-- boards.pageable.pageNumber-1의 해당하는 값으로 page번호 파라미터로 넘겨준다. -->
+              <a class="page-link" href="#" th:href="@{/board/list(page=${boards.pageable.pageNumber-1})}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <!-- i는 startPage 부터 endPage 까지 증가하면서 index값을 받아 온다. -->
+            <!-- boards.getPageable().getPageNumber() 메서드를 thymeleaf에서 호출 -->
+            <!-- 'get'을 제거하여 boards.pageable.pageNumber 으로 호출 시 타임리프가 알아서 호출해준다. -->
+            <!-- 현재 보고 있는 page와 같다면 해당 번호는 보여주지 않는다.
+                 (controller에서 1부터 보여주나 page는 0부터이므로 +1) -->
+            <li class="page-item" th:classappend="${i==boards.pageable.pageNumber + 1 } ? 'disabled'" th:each="i: ${#numbers.sequence(startPage, endPage)}">
+              <!-- 보여주는 버튼의 i값은 page+1 값이므로 page의 값을 넘겨주는 파라미터는 i-1 해주어야한다. -->
+              <a class="page-link" href="#" th:href="@{/board/list(page=${i-1})}" th:text="${i}" >1</a>
+            </li>
+            <li class="page-item" th:classappend="${boards.totalPages==boards.pageable.pageNumber + 1 } ? 'disabled'">
+              <a class="page-link" href="#" th:href="@{/board/list(page=${boards.pageable.pageNumber+1})}" >Next</a>
+            </li>
+          </ul>
+        </nav>
+
         <!-- 속성 오른쪽으로 주는 class="text-right" 부트스트랩 클래스 이용 -->
         <div class="text-right">
           <a type="button" class="btn btn-primary" th:href="@{/board/form}">쓰기</a>

@@ -4,6 +4,10 @@ import my.springboot.myrest.model.Board;
 import my.springboot.myrest.repository.BoardRepository;
 import my.springboot.myrest.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,8 +27,16 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model){
-        List<Board> boards = boardRepository.findAll(); // DB 모든데이터 다 가져오기
+    public String list(Model model, @PageableDefault(size = 5) Pageable pageable){
+        // DB 모든데이터 page로 다 가져오기
+        Page<Board> boards = boardRepository.findAll(pageable);
+        //boards.getPageable().getPageNumber() : 페이지의 개수를 받아온다
+        //boards.getTotalPages() : 페이지의 전체 개수를 받아온다.
+        int startPage = Math.max(1,boards.getPageable().getPageNumber() - 4);
+        int endPage = Math.min(boards.getTotalPages(),boards.getPageable().getPageNumber() + 4);
+
+        model.addAttribute("startPage",startPage);
+        model.addAttribute("endPage",endPage);
         model.addAttribute("boards",boards);
         return "board/list";
     }
@@ -35,7 +47,7 @@ public class BoardController {
             model.addAttribute("board",new Board());
         }
         else{
-            //파라미터로 받은 id값 조회(JPA에서 지원) , orElse를 통해 못찾는경우 null반환
+            //파라미터로 받은 id값 조회( JPA에서 지원) , orElse를 통해 못찾는경우 null반환
             Board board = boardRepository.findById(id).orElse(null);
             model.addAttribute("board",board);
         }
