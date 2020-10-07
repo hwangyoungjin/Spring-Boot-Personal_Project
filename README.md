@@ -153,7 +153,7 @@
 
 **게시판 데이터 조회 + 생성 + 수정 과정 form 정리**
 ---
-![form 동작과정](https://user-images.githubusercontent.com/60174144/95306077-daf2fd00-08c1-11eb-89c9-e132671a5a06.png)
+![Form 동작 과정](https://user-images.githubusercontent.com/60174144/95362304-dbfb4d00-0908-11eb-892f-7e8f3cc9420f.png)
 
 [7. JPA이용한 RESTful API 작성]
 ---
