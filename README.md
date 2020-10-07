@@ -93,7 +93,69 @@
 
 	6. 애노테이션이 아닌 Validator인터페이스를 통해 새로운 [Vaildator클래스](https://lazymankook.tistory.com/86) (BoardValidator) 만들기  
 
-[6. JPA이용한 RESTful API 작성]
+
+[6. JPA를 이용한 페이지 처리 및 검색]
+---
+1. JPA의 Page 클래스를 이용해서 페이지 처리 & 검색 기능 구현
+	1. 게시판 글 수가 많아지면 처리할 페이지 처리(페이징)
+		1. [부트스트랩 Pagnation](https://getbootstrap.com/docs/4.4/components/pagination/#overview)
+		2. DB 모든데이터 page로 다 가져오기[Spring Data JAP-pageable](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
+		```java
+		// 첫 번째 방법
+		// page는 0번 시작하며 page안에 데이터 개수는 20개로 지정
+		public String list(Model model, Pageable pageable){
+        			Page<Board> boards = boardRepository.findAll(PageRequest.of(0,10));
+        			model.addAttribute("boards",boards);
+			return "board/list";
+		}
+
+		// 두 번째 방법
+		// 파라미터로 받아서 url로 페이지 번호, 개수 받기
+		// http://localhost:8080/board/list?page=1&size=10
+ 		// @PageableDefault를 이용하여 사이즈 정해주기
+		public String list(Model model, @PageableDefault(size = 5) Pageable pageable){
+        			Page<Board> boards = boardRepository.findAll(pageable);
+        			model.addAttribute("boards",boards);
+			return "board/list";
+ 		}
+		```
+		3. [page버튼의 index값 Conteroller에서 받아오기](https://stackoverflow.com/questions/40007190/thymeleaf-loop-until-a-number)
+		4. index를 이용해서 해당 페이지 인 경우 버튼 diable - th:classappend
+		5. [page버튼 파라미터받아서 url 넣기- th:href]
+
+	2. 게시판 검색 기능 만들기
+		1. [부트스트랩 검색 폼-inline](https://getbootstrap.com/docs/4.4/components/forms/)
+		2. [검색 form우측정렬할 부트스트랩 class 적용 -justify](https://getbootstrap.com/docs/4.4/utilities/flex/)
+		3. [검색 버튼 색 추가 할 부트스트랩 class 적용 - btn-light](https://getbootstrap.com/docs/4.4/components/buttons/#button-tags)
+		4. BoardController.java에서 @GetMapping("/list")의 param으로 검색 문자 추가
+		```java
+		@GetMapping("/list")
+    		public String list(Model model, @PageableDefault(size = 5) Pageable pageable ,
+                       		@RequestParam(required = false, defaultValue = "") String searchText){  // searchText 파라미터 필수아니므로 false
+		```
+		5. 검색 문자를 통해 해당하는 값 받기 위해 BoardRepository.java 수정
+			- [JPA Containing](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
+			```java
+			//파라미터와 일치하는 데이터 page로 반환
+			Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
+			```
+		6. BoardController.java @GetMapping("/list") 에서 5. 이용
+		```java
+		Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText,searchText,pageable)
+		```
+		```html
+		[list.form의 검색 input 에서 controller로 (searchText)인자 안넘어가는 오류]
+		<!--input의 name속성 추가해서 해결-->
+		<input type="text" class="form-control" id="searchText" name="searchText">
+		```
+		7. search후에도 Previous, 번호, Next 적용될 수 있도록  th:href의 인자 추가 
+
+
+**게시판 데이터 조회 + 생성 + 수정 과정 form 정리**
+---
+![form 동작과정](https://user-images.githubusercontent.com/60174144/95306077-daf2fd00-08c1-11eb-89c9-e132671a5a06.png)
+
+[7. JPA이용한 RESTful API 작성]
 ---
 1. JPA이용해서 MySQL DB의 데이터 조작할 수 있는 컨트롤러 생성
 	1. RestController 생성 [스프링 REST 튜토리얼 참고](https://spring.io/guides/tutorials/rest/)
@@ -119,32 +181,4 @@
 	3. U : PUT -> url : localhost:8080/api/boards/17 -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
 	4. D : DELETE -> url : localhost:8080/api/boards/17 -> **Send**
 	```
-
-[7. JPA를 이용한 페이지 처리 및 검색]
----
-1. JPA의 Page 클래스를 이용해서 페이지 처리 & 검색 기능 구현
-	1. 게시판 글 수가 많아지면 처리할 페이지 처리(페이징)
-		1. [부트스트랩 Pagnation](https://getbootstrap.com/docs/4.4/components/pagination/#overview)
-		2. DB 모든데이터 page로 다 가져오기[Spring Data JAP-pageable](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
-		```java
-		// 첫 번째 방법
-		// page는 0번 시작하며 page안에 데이터 개수는 20개로 지정
-		public String list(Model model, Pageable pageable){
-        			Page<Board> boards = boardRepository.findAll(PageRequest.of(0,10));
-        			model.addAttribute("boards",boards);
-			return "board/list";
-		}
-		// 두 번째 방법
-		// 파라미터로 받아서 url로 페이지 번호, 개수 받기
-		// http://localhost:8080/board/list?page=1&size=10
- 		// @PageableDefault를 이용하여 사이즈 정해주기
-		public String list(Model model, @PageableDefault(size = 5) Pageable pageable){
-        			Page<Board> boards = boardRepository.findAll(pageable);
-        			model.addAttribute("boards",boards);
-			return "board/list";
- 		}
-		```
-		3. [page버튼의 index값 Conteroller에서 받아오기](https://stackoverflow.com/questions/40007190/thymeleaf-loop-until-a-number)
-		4. index를 이용해서 해당 페이지 인 경우 버튼 diable - th:classappend
-		5. [page버튼 파라미터받아서 url 넣기- th:href]()
 

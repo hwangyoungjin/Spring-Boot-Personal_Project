@@ -27,9 +27,12 @@ public class BoardController {
     private BoardValidator boardValidator;
 
     @GetMapping("/list")
-    public String list(Model model, @PageableDefault(size = 5) Pageable pageable){
+    public String list(Model model, @PageableDefault(size = 5) Pageable pageable ,
+                       @RequestParam(required = false, defaultValue = "") String searchText){  // searchText 파라미터 필수아니므로 false
         // DB 모든데이터 page로 다 가져오기
-        Page<Board> boards = boardRepository.findAll(pageable);
+        //Page<Board> boards = boardRepository.findAll(pageable);
+        Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText,searchText,pageable);
+
         //boards.getPageable().getPageNumber() : 페이지의 개수를 받아온다
         //boards.getTotalPages() : 페이지의 전체 개수를 받아온다.
         int startPage = Math.max(1,boards.getPageable().getPageNumber() - 4);
@@ -42,7 +45,7 @@ public class BoardController {
     }
 
     @GetMapping("/form")
-    public String form(Model model, @RequestParam(required = false) Long id){ // 파라미터 필수아니므로 false
+    public String form(Model model, @RequestParam(required = false) Long id){ // id 파라미터 필수아니므로 false
         if(id == null){
             model.addAttribute("board",new Board());
         }
