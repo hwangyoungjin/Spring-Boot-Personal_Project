@@ -46,7 +46,7 @@ public class BoardController {
 
     @GetMapping("/form")
     public String form(Model model, @RequestParam(required = false) Long id){ // id 파라미터 필수아니므로 false
-        if(id == null){
+        if(id == null){ //null인경우 새로운 글을 작성하는것이므로 객체 넣어준다.
             model.addAttribute("board",new Board());
         }
         else{
