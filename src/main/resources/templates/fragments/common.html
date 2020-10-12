@@ -15,6 +15,9 @@
 
     <body>
     <!-- 공통화면으로 들어갈 thymeleaf -->
+        <!-- ms,sd등등은 사이즈 변경될 경우 바뀌는 사이즈 기준을 의미 -->
+        <!-- class이름 띄어쓰기마다 각각의 의미&기준을 가지고 있다. -->
+        <!-- https://getbootstrap.com/docs/4.4/layout/grid/ -->
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:fragment="menu(menu)">
             <a class="navbar-brand" href="#">Spring Boot Tutorial</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">

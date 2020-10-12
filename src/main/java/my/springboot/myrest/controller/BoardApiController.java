@@ -15,7 +15,7 @@ public class BoardApiController {
     @Autowired
     private BoardRepository repository;
 
-    // Aggregate root
+    //Aggregate root
 
     @GetMapping("/boards")
     List<Board> all(@RequestParam(required = false) String title,
