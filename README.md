@@ -181,4 +181,7 @@
 	3. U : PUT -> url : localhost:8080/api/boards/17 -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
 	4. D : DELETE -> url : localhost:8080/api/boards/17 -> **Send**
 	```
+[8. 사용자 테이블을 만들고 Spring Security를 적용하여 인증 및 권한 처리, 로그인, 회원가입, 로그아웃, 페이지 권한 처리]
+---
+
 
