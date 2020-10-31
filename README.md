@@ -181,7 +181,60 @@
 	3. U : PUT -> url : localhost:8080/api/boards/17 -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
 	4. D : DELETE -> url : localhost:8080/api/boards/17 -> **Send**
 	```
-[8. 사용자 테이블을 만들고 Spring Security를 적용하여 인증 및 권한 처리, 로그인, 회원가입, 로그아웃, 페이지 권한 처리]
+[8. 사용자 테이블을 만들고 Spring Security를 적용 -> 인증 및 권한 처리, 로그인, 회원가입, 로그아웃, 페이지 권한 처리]
 ---
+1.pom.xml의 Spring Security 의존성추가[참고](https://spring.io/guides/gs/securing-web/)
+	```xml
+	<dependency>
+	  <groupId>org.springframework.boot</groupId>
+	  <artifactId>spring-boot-starter-security</artifactId>
+	</dependency>
+	<dependency>
+	  <groupId>org.springframework.security</groupId>
+	  <artifactId>spring-security-test</artifactId>
+	  <scope>test</scope>
+	</dependency>
+	```
+2. WebSecurityConfigurerAdapter를 상속받은 클래스(WebSecurityConfig)를 구현하여 Security이용하기
+3. DB 사용자,권한 테이블 생성
+	- User(id,username,password,enabled) [ PK : id ]
+	- role(id, name) [PK : id]
+4. JDBC mysql 인증 설정 [샘플예제참고](https://www.baeldung.com/spring-security-jdbc-authentication)
+	```java
+	@Autowired
+	// application.properties에 있는 정보를 인스턴스로 받아온다.
+	private DataSource dataSource;	
 
-
+	/**
+	* 참고
+	* Authentication : 로그인의 관한 설정
+	* Authroization : 권한의 관한 설정
+	*/
+	@Autowired
+	//만든 User테이블을 AuthenticationManagerBuilder 설정을 통해 스프링이 알아서 인증처리
+	public void configureGlobal(AuthenticationManagerBuilder auth) 
+	  throws Exception {
+	    auth.jdbcAuthentication()
+	      .dataSource(dataSource) //스프링이 해당 dataSource를 사용하여 인증처리
+	      .passwordEncoder(passwordEncoder()) // 스프링에서 제공하는 passwordEncoder 적용하여 알아서 pw 암호화
+	      .usersByUsernameQuery("select username,password,enabled "
+	        + "from user "
+	        + "where username = ?") // 파라미터에 알아서 username이 들어간다.
+	      .authoritiesByUsernameQuery("select username, name "
+	        + "from user as u, role as r "
+                     + "where username = ?");
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+	    return new BCryptPasswordEncoder();
+	}
+	```
+	
+	
+	
+	
+	
+	
+	
+	
