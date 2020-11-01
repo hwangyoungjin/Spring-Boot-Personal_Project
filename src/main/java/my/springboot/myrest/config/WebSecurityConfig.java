@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //어떤 보안설정을 할것인지 정한다.
                 .authorizeRequests()
                     //css 경로 추가
-                    .antMatchers("/","/css/**").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
+                    .antMatchers("/","/account/register","/css/**").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
                     .anyRequest().authenticated() // home이 아닌 요청은 모두 authenticate(로그인)가 있어야만 볼 수 있도록
                     .and()//이어서
                 .formLogin()//로그인설정

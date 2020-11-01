@@ -279,16 +279,29 @@
 	
 6. 회원 가입 화면 만들기
 	- register.html
+	'''java
+	[에러발생]
+	: form에서 username과 password 받아서 db에 저장할때 발생
+	[에러문구]
+	: java.sql.SQLException: Field 'id' doesn't have a default value
+	[해결](https://blog.naver.com/PostView.nhn?blogId=imf4&logNo=220762181574)
+	- form에서 User id값 안받고 User Table에서 id 컬럼이 AUTO_INCREMENT가 아니기 떄문에 발생
+	- User 테이블의 id 컬럼 AUTO_INCREMENT으로 수정
+	```
 
 7. Model class 만들기
 	- User, Role, 의 Model class 만들기 [ManyToMany의 user_role 이용](https://www.baeldung.com/jpa-many-to-many)
 
-8. 로그인 관리 하는 Account Controller 만들기
+8. 로그인 관리 하는 Controller 만들기
+	- AccountController
 	```java
 	
 	
 	```
+8. Repository 만들기
+	- UserRepository
 
+9. 권한 및 패스워드 암호화를 하는 비지니스 로직이 필요하므로 Service패키지 추가
 
 
 	
