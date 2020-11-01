@@ -181,7 +181,8 @@
 	3. U : PUT -> url : localhost:8080/api/boards/17 -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
 	4. D : DELETE -> url : localhost:8080/api/boards/17 -> **Send**
 	```
-[8. Spring Security]
+
+[8. Spring Security 활용해서 login,register,logout]
 ---
 ##### 사용자 테이블을 만들고 Spring Security를 적용 -> 인증 및 권한 처리, 로그인, 회원가입, 로그아웃, 페이지 권한 처리
 ---
@@ -197,6 +198,7 @@
 	  <scope>test</scope>
 	</dependency>
 	```
+
 2. WebSecurityConfigurerAdapter를 상속받은 클래스(WebSecurityConfig)를 구현하여 Security이용하기
 	```java
 	@Override
@@ -216,9 +218,12 @@
 	                    .permitAll();
 	    }
 	```
-3. DB 사용자,권한 테이블 생성
-	- User(id,username,password,enabled) [ PK : id ]
+
+3. DB 사용자,권한 테이블 생성 **user_role : User와 Role테이블 ManyToMany**
+	- user(id,username,password,enabled) [ PK : id ]
 	- role(id, name) [PK : id]
+	- user_role(user_id,role_id) [PK : user_id,role_id], [FK : user_id(user참조), role_id(role참조)]
+
 4. JDBC mysql 인증 설정 [샘플예제참고](https://www.baeldung.com/spring-security-jdbc-authentication)
 	```java
 	@Autowired
@@ -250,8 +255,42 @@
 	    return new BCryptPasswordEncoder();
 	}
 	```
-5. 로그인 화면 [login.html 만들기](https://getbootstrap.com/docs/4.4/examples/sign-in/)
-6. 로그인 관리 할 Account Controller 만들기
+
+5. 로그인 화면 만들기
+	- [login.html](https://getbootstrap.com/docs/4.4/examples/sign-in/)
+	- id와 pw 의 input에서 name 속성 추가 + error처리 코드 추가
+	```html
+	<form class="form-signin" th:action="@{/account/login}" method="post">
+	  <!-- error처리-->
+	  <div th:if="${param.error}" class="alert alert-danger" role="alert">
+	        Invalid username and password.
+	  </div>
+	   div th:if="${param.logout}" class="alert alert-primary" role="alert">
+	        You have been logged out.
+	  </div>  
+	  	.
+		.
+	  <!-- input 요소의 이름을 명시 -> 타임리프가 controller단에 parameter로 넘길때 name값으로 넘긴다. -->
+	  <input type="email" id="Username" name="username"  class="form-control" placeholder="Username" required autofocus>
+     	  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+      		.	.
+		.
+	```
+	
+6. 회원 가입 화면 만들기
+	- register.html
+
+7. Model class 만들기
+	- User, Role, 의 Model class 만들기 [ManyToMany의 user_role 이용](https://www.baeldung.com/jpa-many-to-many)
+
+8. 로그인 관리 하는 Account Controller 만들기
+	```java
+	
+	
+	```
+
+
+
 	
 	
 	
