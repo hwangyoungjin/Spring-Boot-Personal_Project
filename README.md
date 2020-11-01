@@ -181,9 +181,11 @@
 	3. U : PUT -> url : localhost:8080/api/boards/17 -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
 	4. D : DELETE -> url : localhost:8080/api/boards/17 -> **Send**
 	```
-[8. 사용자 테이블을 만들고 Spring Security를 적용 -> 인증 및 권한 처리, 로그인, 회원가입, 로그아웃, 페이지 권한 처리]
+[8. Spring Security]
 ---
-1.pom.xml의 Spring Security 의존성추가[참고](https://spring.io/guides/gs/securing-web/)
+##### 사용자 테이블을 만들고 Spring Security를 적용 -> 인증 및 권한 처리, 로그인, 회원가입, 로그아웃, 페이지 권한 처리
+---
+1. pom.xml의 Spring Security 의존성추가 [참고](https://spring.io/guides/gs/securing-web/)
 	```xml
 	<dependency>
 	  <groupId>org.springframework.boot</groupId>
@@ -196,6 +198,24 @@
 	</dependency>
 	```
 2. WebSecurityConfigurerAdapter를 상속받은 클래스(WebSecurityConfig)를 구현하여 Security이용하기
+	```java
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+	        http
+	                //어떤 보안설정을 할것인지 정한다.
+	                .authorizeRequests()
+	                    //css 경로 추가
+	                    .antMatchers("/","/css/**").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
+	                    .anyRequest().authenticated() // home이 아닌 요청은 모두 authenticate(로그인)가 있어야만 볼 수 있도록
+	                    .and()//이어서
+	                .formLogin()//로그인설정
+		                    .loginPage("/login")//로그인 폼 클릭시 자동으로 redirect 되어 login 폼으로 이동
+	                    .permitAll() // 로그인 되지 않은 사용자이므로 모두 접근 가능하도록
+	                    .and()//이어서
+	                .logout()//로그아웃
+	                    .permitAll();
+	    }
+	```
 3. DB 사용자,권한 테이블 생성
 	- User(id,username,password,enabled) [ PK : id ]
 	- role(id, name) [PK : id]
@@ -230,6 +250,8 @@
 	    return new BCryptPasswordEncoder();
 	}
 	```
+5. 로그인 화면 [login.html 만들기](https://getbootstrap.com/docs/4.4/examples/sign-in/)
+6. 로그인 관리 할 Account Controller 만들기
 	
 	
 	

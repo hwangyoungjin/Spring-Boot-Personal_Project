@@ -30,11 +30,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 //어떤 보안설정을 할것인지 정한다.
                 .authorizeRequests()
-                    .antMatchers("/").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
+                    //css 경로 추가
+                    .antMatchers("/","/css/**").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
                     .anyRequest().authenticated() // home이 아닌 요청은 모두 authenticate(로그인)가 있어야만 볼 수 있도록
                     .and()//이어서
                 .formLogin()//로그인설정
-                    .loginPage("/login")//로그인 폼 클릭시 자동으로 redirect 되어 login 폼으로 이동
+                    .loginPage("/account/login")//로그인 폼 클릭시 자동으로 redirect 되어 login 폼으로 이동
                     .permitAll() // 로그인 되지 않은 사용자이므로 모두 접근 가능하도록
                     .and()//이어서
                 .logout()//로그아웃
@@ -58,8 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         + "from user "
                         + "where username = ?") // 파라미터에 알아서 username이 들어간다.
                 .authoritiesByUsernameQuery("select username, name "
-                        + "from user as u, role as r "
-                        + "where username = ?");
+                        + "from user as u, role as r " );
+//                        + "where username = ?");
     }
 
     @Bean
