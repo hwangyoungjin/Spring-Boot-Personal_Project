@@ -22,7 +22,7 @@ public class UserService {
         user.setPassword(encodedPassword);
         user.setEnabled(true);
         Role role = new Role();// Role테이블의 ROLE_USER을 검색해서 가져올 수 있지만 그냥 간편하게 하드코딩
-        role.setId(Long.valueOf(11));
+        role.setId(Long.valueOf(1));
         user.getRoles().add(role); //해당 user를 save하면 user_role 테이블에 해당 user_id와 role_id가 저장된다
         return userRepository.save(user);
     }

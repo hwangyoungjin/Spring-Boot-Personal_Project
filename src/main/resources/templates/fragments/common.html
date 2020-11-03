@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:fragment="head(title)">
         <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -31,6 +32,20 @@
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/board/list}" th:classappend="${menu}=='board'? 'active'">게시판</a>
                 </ul>
+                
+                <!-- "!isAuthenticated()" = 로그인이 되지 않은 사용자에게만 적용-->
+                <a class="btn btn-secondary my-2 mr-2 my-sm-0" th:href="@{/account/login}"
+                sec:authorize="!isAuthenticated()">LogIn</a>          
+                <a class="btn btn-secondary my-2 my-sm-0" th:href="@{/account/register}"
+                sec:authorize="!isAuthenticated()">회원가입</a>          
+
+                <!-- "isAuthenticated()" = 로그인이 된 사용자에게만 적용-->
+                <!-- th:action @{/logout} 하면 스프링시큐리티에서 로그아웃처리 해준다. -->
+                <form class="form-inline my-2 my-lg-0" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="POST">
+                    <span class="text-white mx-2" sec:authentication="name">사용자</span>
+                    <span class="text-white mx-2" sec:authentication="principal.authorities">권한</span>
+                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">LogOut</button>
+                </form>
             </div><!--/.nav-collapse -->
         </nav>
     </body>

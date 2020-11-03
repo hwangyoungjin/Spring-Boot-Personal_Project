@@ -279,13 +279,13 @@
 	
 6. 회원 가입 화면 만들기
 	- register.html
-	'''java
+	```java
 	[에러발생]
 	: form에서 username과 password 받아서 db에 저장할때 발생
 	[에러문구]
 	: java.sql.SQLException: Field 'id' doesn't have a default value
 	[해결](https://blog.naver.com/PostView.nhn?blogId=imf4&logNo=220762181574)
-	- form에서 User id값 안받고 User Table에서 id 컬럼이 AUTO_INCREMENT가 아니기 떄문에 발생
+	- form에서 User id값 안받는데 id 컬럼이 AUTO_INCREMENT가 아니기 떄문에 id값 찾으려는에러 발생
 	- User 테이블의 id 컬럼 AUTO_INCREMENT으로 수정
 	```
 
@@ -294,15 +294,47 @@
 
 8. 로그인 관리 하는 Controller 만들기
 	- AccountController
-	```java
-	
-	
-	```
+
 8. Repository 만들기
 	- UserRepository
 
-9. 권한 및 패스워드 암호화를 하는 비지니스 로직이 필요하므로 Service패키지 추가
+9. 권한 및 패스워드 암호화를 하는 비지니스 로직이 필요하므로 Service  추가
+	- UserService 
 
+10. 메인화면(common)에 [조건](https://www.thymeleaf.org/doc/articles/springsecurity.html)에 맞는 로그인/로그아웃 버튼 설정
+	- pom.xml 에 [Spring Security integration module](https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5/3.0.4.RELEASE) 의존성 추가
+	- common.html의 securitu namespace 추가
+	```html
+	<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	```
+	```html
+	[sec 동작안하는 문제] 
+	<div sec:authorize="isAuthenticated()">
+	  This content is only shown to authenticated users.
+	</div>
+	Logged user: <span sec:authentication="name">Bob</span>
+	Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+	[해결방법?]
+	<dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        	</dependency>
+	이었다가
+	<!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4 -->
+	<dependency>
+	    <groupId>org.thymeleaf.extras</groupId>
+	    <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+	    <version>2.1.3.RELEASE</version>
+	</dependency>
+	으로 바꿨다가
+	다시
+	<dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        	</dependency>	
+	으로 다시 바꾸니깐 됨...
+	```
+	
 
 	
 	
