@@ -10,6 +10,8 @@
   </head>
 
   <body class ="text-center">
+    <!-- 보안설정에서 설정한 .formLogin()//로그인설정
+                    .loginPage("/account/login")의 URL을 Form에서 보내야 한다.  -->
     <form class="form-signin" th:action="@{/account/login}" method="post">
       <a th:href="@{/}"><img class="mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72"></a>
       <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>

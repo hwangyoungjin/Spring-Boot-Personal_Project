@@ -31,8 +31,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //어떤 보안설정을 할것인지 정한다.
                 .authorizeRequests()
                     //css 경로 추가
-                    .antMatchers("/","/account/register","/css/**").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
-                    .anyRequest().authenticated() // home이 아닌 요청은 모두 authenticate(로그인)가 있어야만 볼 수 있도록
+                    // permitAll을 통해 누구나 접근 할 수 있다고 설정
+                    .antMatchers("/","/account/register","/css/**").permitAll()
+                    //Matching이 안된 요청은 모두 여기에 걸리고 authenticate(로그인)가 있어야만 볼 수 있도록
+                    .anyRequest().authenticated()
                     .and()//이어서
                 .formLogin()//로그인설정
                     .loginPage("/account/login")//로그인 폼 클릭시 자동으로 redirect 되어 login 폼으로 이동
@@ -40,6 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()//이어서
                 .logout()//로그아웃
                     .permitAll();
+
     }
 
 

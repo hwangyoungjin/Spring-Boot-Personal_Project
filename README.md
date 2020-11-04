@@ -200,23 +200,24 @@
 	```
 
 2. WebSecurityConfigurerAdapter를 상속받은 클래스(WebSecurityConfig)를 구현하여 Security이용하기
+	- **Access 관련 부분은 모두 여기에 설정**
 	```java
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-	        http
-	                //어떤 보안설정을 할것인지 정한다.
-	                .authorizeRequests()
-	                    //css 경로 추가
-	                    .antMatchers("/","/css/**").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
-	                    .anyRequest().authenticated() // home이 아닌 요청은 모두 authenticate(로그인)가 있어야만 볼 수 있도록
-	                    .and()//이어서
-	                .formLogin()//로그인설정
-		                    .loginPage("/login")//로그인 폼 클릭시 자동으로 redirect 되어 login 폼으로 이동
-	                    .permitAll() // 로그인 되지 않은 사용자이므로 모두 접근 가능하도록
-	                    .and()//이어서
-	                .logout()//로그아웃
-	                    .permitAll();
-	    }
+                    http
+                            //어떤 보안설정을 할것인지 정한다.
+                            .authorizeRequests()
+                                //css 경로 추가
+                                .antMatchers("/","/account/register","/css/**").permitAll() // permitAll을 통해 누구나 접근 할 수 있다고 설정
+                                .anyRequest().authenticated() // Matching이 안된 요청은 모두 여기에 걸리고 authenticate(로그인)가 있어야만 볼 수 있도록
+                                .and()//이어서
+                            .formLogin()//로그인설정
+                                .loginPage("/account/login")//로그인 폼 클릭시 자동으로 redirect 되어 login 폼으로 이동
+                                .permitAll() // 로그인 되지 않은 사용자이므로 모두 접근 가능하도록
+                                .and()//이어서
+                            .logout()//로그아웃
+                                .permitAll();
+                }
 	```
 
 3. DB 사용자,권한 테이블 생성 **user_role : User와 Role테이블 ManyToMany**
@@ -245,9 +246,11 @@
 	      .usersByUsernameQuery("select username,password,enabled "
 	        + "from user "
 	        + "where username = ?") // 파라미터에 알아서 username이 들어간다.
-	      .authoritiesByUsernameQuery("select username, name "
-	        + "from user as u, role as r "
-                     + "where username = ?");
+	      .authoritiesByUsernameQuery("select u.username, r.name " //권한의 관한 설점
+                    + "from user_role as ur "
+                    + "inner join user as u on ur.user_id = u.id "
+                    + "inner join role as r on ur.role_id = r.id "
+                    + "where u.username = ? ");
 	}
 	
 	@Bean
@@ -258,7 +261,7 @@
 
 5. 로그인 화면 만들기
 	- [login.html](https://getbootstrap.com/docs/4.4/examples/sign-in/)
-	- id와 pw 의 input에서 name 속성 추가 + error처리 코드 추가
+	- id와 pw 의 input에서 name 속성 추가 + [error처리 코드](https://spring.io/guides/gs/securing-web/) 추가
 	```html
 	<form class="form-signin" th:action="@{/account/login}" method="post">
 	  <!-- error처리-->
@@ -273,7 +276,8 @@
 	  <!-- input 요소의 이름을 명시 -> 타임리프가 controller단에 parameter로 넘길때 name값으로 넘긴다. -->
 	  <input type="email" id="Username" name="username"  class="form-control" placeholder="Username" required autofocus>
      	  <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
-      		.	.
+      		.	
+		.
 		.
 	```
 	
@@ -294,12 +298,65 @@
 
 8. 로그인 관리 하는 Controller 만들기
 	- AccountController
-
+	```java
+                @Controller
+                @RequestMapping("/account")
+                public class AccountController {
+                
+                    @Autowired
+                    UserService userService;
+                
+                    @GetMapping("/login")
+                    public String login(){
+                        return "account/login";
+                    }
+                
+                    @PostMapping("/register")
+                    public String register(User user){
+                        userService.save(user);
+                        return "redirect:/"; //가입 완료시 바로 로그인되어 home(index.html)으로 이동
+                    }
+                
+                    @GetMapping("/register")
+                    public String register(){
+                        return "account/register";
+                    }
+                }
+	```
 8. Repository 만들기
 	- UserRepository
+	```java
+                @Repository
+                public interface UserRepository extends JpaRepository<User, Long> {
+                
+                    //JPA 규칙에 따라 인터페이스만 정의하면 JPA가 알아서 조회해준다.
+                
+                }
+	```
 
 9. 권한 및 패스워드 암호화를 하는 비지니스 로직이 필요하므로 Service  추가
 	- UserService 
+	```java
+                @Service
+                public class UserService {
+                
+                    @Autowired
+                    UserRepository userRepository;
+                
+                    @Autowired
+                    PasswordEncoder passwordEncoder;
+                
+                    public User save(User user){ // service에서 패스워드인코더 와 enable값 넣고 저장
+                        String encodedPassword = passwordEncoder.encode(user.getPassword()); //패스워드 인코더
+                        user.setPassword(encodedPassword);
+                        user.setEnabled(true);
+                        Role role = new Role();// Role테이블의 ROLE_USER을 검색해서 가져올 수 있지만 그냥 간편하게 하드코딩
+                        role.setId(Long.valueOf(1));
+                        user.getRoles().add(role); //해당 user를 save하면 user_role 테이블에 해당 user_id와 role_id가 저장된다
+                        return userRepository.save(user);
+                    }
+                }
+	```
 
 10. 메인화면(common)에 [조건](https://www.thymeleaf.org/doc/articles/springsecurity.html)에 맞는 로그인/로그아웃 버튼 설정
 	- pom.xml 에 [Spring Security integration module](https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5/3.0.4.RELEASE) 의존성 추가
@@ -334,6 +391,10 @@
         	</dependency>	
 	으로 다시 바꾸니깐 됨...
 	```
+---
+**Security 간단 정리**
+---
+![Security정리](https://user-images.githubusercontent.com/60174144/98073146-04944980-1eab-11eb-9ff7-0fa492de59d4.png)
 	
 
 	

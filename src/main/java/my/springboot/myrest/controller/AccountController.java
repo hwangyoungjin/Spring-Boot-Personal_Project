@@ -27,7 +27,6 @@ public class AccountController {
         return "redirect:/"; //가입 완료시 바로 로그인되어 home(index.html)으로 이동
     }
 
-
     @GetMapping("/register")
     public String register(){
         return "account/register";
