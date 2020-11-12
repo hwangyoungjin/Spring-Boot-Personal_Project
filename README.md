@@ -395,6 +395,10 @@
 **Security 간단 정리**
 ---
 ![Security정리](https://user-images.githubusercontent.com/60174144/98073146-04944980-1eab-11eb-9ff7-0fa492de59d4.png)
+---
+
+[9. JPA를 이용하여 @OneToMany 관계 설정하기]
+---
 	
 
 	
