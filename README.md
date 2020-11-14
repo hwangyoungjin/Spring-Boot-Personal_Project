@@ -293,7 +293,23 @@
 	- User 테이블의 id 컬럼 AUTO_INCREMENT으로 수정
 	```
 
-7. Model class 만들기
+7. Model class 만들기 [JPA 연관관계 매핑]
+
+	- @JoinTable
+
+	| 옵션 | 설명 |
+	|---|:---:|
+	| `name` | 조인 테이블 명 |
+	| `joinColumns` | 현재 엔티티를 참조하는 외래키 |
+	| `inverseJoinColumns` | 반대방향 엔티티를 참조하는 외래키 |
+	
+	- @JoinColumn
+
+	| 옵션 | 설명 |
+	|---|:---:|
+	| `name` | 매핑할 외래 키 이름 |
+	| `referencedColumnName` | 	외래 키가 참조하는 대상 테이블의 컬럼명 |
+
 	- User, Role, 의 Model class 만들기 [ManyToMany의 user_role 이용](https://www.baeldung.com/jpa-many-to-many)
 
 8. 로그인 관리 하는 Controller 만들기
@@ -449,15 +465,10 @@
 
 	1. Controller에서 현재 사용자의 username을 Authentication을 이용하여 받고 이를 service를 통해 저장 
 	2. BoardService 만들어서 username과 board를 매개변수로 받고 username에서 user찾아서 Board에 넣는다
-	3, BoardRepository에서 해당 board 저장 
+	3. BoardRepository에서 해당 board 저장 
 	
-1. @OneToMany, @ManyToOne 어노테이션을 이용하여 양방향 매핑 설정
-2. Cascade, OrphanRemoval 속성을 이용하여 매핑된 데이터 조작
-	
-	
-	
-	
-	
+3. @OneToMany, @ManyToOne 어노테이션을 이용하여 양방향 매핑 설정
+4. Cascade, OrphanRemoval 속성을 이용하여 매핑된 데이터 조작
 	
 	
 	
