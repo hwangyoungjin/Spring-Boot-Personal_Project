@@ -31,4 +31,12 @@ public class Role {
     // => 양방향 맵핑으로 Role테이블을 조회하면 조인된 상대방 테이블(User)도 같이 조회한다.
     @ManyToMany(mappedBy = "roles")
     private List<User> users;
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
 }

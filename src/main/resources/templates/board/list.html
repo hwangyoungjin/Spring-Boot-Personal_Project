@@ -41,7 +41,7 @@
               <!-- 해당 td안에 있던 th:text가 <a>를 통해 묻힐 수 있기 때문에 <a>태그 안으로 넣고 -->
               <!-- th:href를 통해 해당 text 클릭시 해당 객체의 id파라미터를 전달하면서 url로 이동 -->
               <td ><a th:text="${board.title}" th:href="@{/board/form(id=${board.id})}">Hello World</a></td>
-              <td >황영진</td>
+              <td th:text="${board.user.username}">황영진</td>
             </tr>
           </tbody>
         </table>

@@ -2,12 +2,15 @@ package my.springboot.myrest.controller;
 
 import my.springboot.myrest.model.Board;
 import my.springboot.myrest.repository.BoardRepository;
+import my.springboot.myrest.service.BoardService;
 import my.springboot.myrest.validator.BoardValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +25,9 @@ public class BoardController {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    @Autowired
+    private BoardService boardService;
 
     @Autowired
     private BoardValidator boardValidator;
@@ -59,7 +65,8 @@ public class BoardController {
 
     @PostMapping("/form")
     public String create(@Valid Board board,
-                         BindingResult bindingResult){
+                         BindingResult bindingResult,
+                         Authentication authentication){
 
         boardValidator.validate(board, bindingResult);
 
@@ -70,8 +77,11 @@ public class BoardController {
             });
             return "board/form";
         }
+
+        String username = authentication.getName(); // 사용자의 유저네임을 받아온다.
         System.out.println(board.getTitle()+" , "+ board.getContent());
-        boardRepository.save(board); // form에서 받은 board 해당 객체의 key값(id)를 통해 DB 저장
+        boardService.save(username,board);
+//        boardRepository.save(board); // form에서 받은 board 해당 객체의 key값(id)를 통해 DB 저장
         return "redirect:/board/list"; // GET(board/list)으로 위임
     }
 }

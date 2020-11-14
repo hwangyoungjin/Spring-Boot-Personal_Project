@@ -401,7 +401,58 @@
 ---
 ##### One(게시자) To Many(게시글) 
 ---
+1. @ManyToOne 어노테이션을 이용하여 Board 조회시 User테이블 조회 하도록 설정하기
+	1. Board클래스의 User필드 추가
+	```java
+	@ManyToOne
+	//이때 name은 어떠한 col이 User테이블과 연결이 될지결정,
+	@JoinColumn(name = "user_id")
+	//해당 변수는 board의 id와 연결된 user객체를 의미
+    	private User user;
+	```
+	2. Board 테이블에서 User테이블과 연결될 **user_id** 컬럼 추가 
+	  (해당컬럼은 FK으로 user테이블의 id값 참조)
+	3. list.html에서 작성자 부분에 타임리프 board.user_id 추가
+	```html
+	list.html 파싱할때 에러발생
+	[에러문구]
+	Caused by: org.thymeleaf.exceptions.TemplateProcessingException: Exception evaluating SpringEL expression: "board.user.username" (template: "board/list" - line 44, col 19)
+	[에러이유]
+	* Board 테이블 User필드의 대한 getter,setter 가 없어서 발생
+	[해결]
+    	public User getUser() {
+    	    	return user;
+    	}
 
+    	public void setUser(User user) {
+     	   	this.user = user;
+    	} 
+	```
+2. 게시판의 글 작성시 작성자의 로그인한 username들어가도록 설정
+	```java
+	form에서 user_id를 직접 전달 하게 되면 다른사람이 개발자도구를 활용해서 다른사람의 user_id를 보낼 수 있다 
+	-> 사용자가보낸 인증정보는 절대 믿어선 안되므로 서버쪽에서 가지고 있는 인증 정보를 활용해야한다 
+	-> Controller에서 직접 Board의 user_id 확인 후 담아준다 
+	```
+	- 현재 로그인 한 사용자 정보 받아오기 [Spring Security의 Authentication 활용](https://dzone.com/articles/how-to-get-current-logged-in-username-in-spring-se)
+		```java
+		* 첫번째 Controller에서 매개변수로 받아오기
+		    @PostMapping("/form")
+    		    public String create(@Valid Board board,
+                         	BindingResult bindingResult,
+                         	Authentication authentication){ // authentication에 알아서 인증정보가 담겨온다.
+
+		* 두번째 매개변수가 아닌 SecurityContextHolder.getContext 전역변수 활용하기
+		    Authentication a = SecurityContextHolder.getContext().getAuthentication();
+		    String user_name = a.getName();
+		```
+
+	1. Controller에서 현재 사용자의 username을 Authentication을 이용하여 받고 이를 service를 통해 저장 
+	2. BoardService 만들어서 username과 board를 매개변수로 받고 username에서 user찾아서 Board에 넣는다
+	3, BoardRepository에서 해당 board 저장 
+	
+1. @OneToMany, @ManyToOne 어노테이션을 이용하여 양방향 매핑 설정
+2. Cascade, OrphanRemoval 속성을 이용하여 매핑된 데이터 조작
 	
 	
 	
