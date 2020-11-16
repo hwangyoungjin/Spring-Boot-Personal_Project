@@ -452,7 +452,7 @@
 	```
 	- 현재 로그인 한 사용자 정보 받아오기 [Spring Security의 Authentication 활용](https://dzone.com/articles/how-to-get-current-logged-in-username-in-spring-se)
 		```java
-		* 첫번째 Controller에서 매개변수로 받아오기
+		* 첫번째 Controller에서 매개변수로 받아오기 [해당 프로젝트에서 이용]
 		    @PostMapping("/form")
     		    public String create(@Valid Board board,
                          	BindingResult bindingResult,
