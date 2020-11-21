@@ -181,6 +181,61 @@
 	3. U : PUT -> url : localhost:8080/api/boards/17 -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
 	4. D : DELETE -> url : localhost:8080/api/boards/17 -> **Send**
 	```
+3. 정리
+	1. RestAPI
+
+	| Methods | Urls | Actions |
+	|---|:---:|:---:|
+	| GET | /api/boards | 게시판(페이지로 변환) 반환 |
+	| POST | /api/boards | 게시판에 게시글 추가 |
+	| GET | /api/boards{id} | 해당 id에 맞는 게시글 반환 |
+	| PUT | /api/boards{id} | 해당 id에 맞는 게시글 수정 |
+	| DELETE | /api/boards{id} | 해당 id에 맞는 게시글 삭제 |
+
+	2. **Spring에서 Controller의 전달인자 2가지 사용방법** (복합적으로 사용도 가능하다)
+		1. Type 1 => http://localhost8080/api/boards?title=123123&content=내용
+			- 매개변수단에 **@RequestParam** 사용
+			- 파라미터의 이름(ex>title)과 값(ex>123123)을 함께 전달
+			- 페이지 및 검색 정보를 함꼐 전달할때 많이 사용
+			```java
+			@GetMapping("/boards")
+			List<Board> all(@RequestParam(required = false) String title,
+			                     @RequestParam(required = false) String content) {
+			//url ?와 &를 통해 들어오는 boards의 제목orcontent 검색을 받기 위해
+			//required = false 이면 파라미터 안들어와도 에러x (true가 기본값 = 안들어오면 에러!)
+			  if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)) { //둘다 전달이 안 된경우
+			      return repository.findAll();
+			  }
+			  else { //title 이나 content 둘중 하나만이라고 전달이 된 경우
+			      //http://localhost:8080/api/boards?title=Hello&content=123123 으로 요청시
+			      return repository.findByTitleOrContent(title, content);
+			  }
+			}
+			```
+		2. Type 2 => http://localhost8080/api/boards/1
+			- uri에 {idx}사용 후 매개변수단에 **@PathVariable** 사용
+			- Rest api에서 값을 호출할때 주로 많이 사용
+			```java
+			// Single item
+			@GetMapping("/boards/{id}")
+			Board one(@PathVariable Long id) {
+			   //http://localhost:8080/api/boards/19 으로 요청시 id 19에 해당하는 데이터 json으로 반환
+			   return repository.findById(id).orElse(null);
+			}			
+			```
+	3. 참고
+		- **요청 본문(Body)에 들어있는 데이터 받기**
+			- 매개변수단에 **@RequestBody** 이용
+			1. postman 에서 POST 전송
+			![POST json형식](https://user-images.githubusercontent.com/60174144/99869104-cd909880-2c0b-11eb-9ddb-57a2c2c5894c.png)
+			2. @RequestBody Board newBoard 매개변수로 HttpMessageConverter를 통해 변환한 객체가 들어간다.
+			```java
+			@PostMapping("/boards") 
+			Board newEmployee(@RequestBody Board newBoard) { //@Valid를 통해 검증 가능, BindingResult 아규먼트를 사용해 코드로 검증에러 확인가능
+			   return repository.save(newBoard);
+			}
+			```
+
 
 [8. Spring Security 활용해서 login,register,logout]
 ---

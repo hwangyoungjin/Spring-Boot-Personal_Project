@@ -20,6 +20,7 @@ public class BoardApiController {
     @GetMapping("/boards")
     List<Board> all(@RequestParam(required = false) String title,
                     @RequestParam(required = false) String content) {
+        //url ?와 &를 통해 들어오는 boards의 제목orcontent 검색을 받기 위해
         //required = false 이면 파라미터 안들어와도 에러x (true가 기본값 = 안들어오면 에러!)
         if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)) { //둘다 전달이 안 된경우
             return repository.findAll();
