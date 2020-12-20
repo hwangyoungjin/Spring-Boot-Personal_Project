@@ -14,7 +14,7 @@
 3. 실시간으로 디자인 볼 수 있도록 visual studio code에 LiveServer 확장프로그램 설치
 4. @RequestParam을 통해 url 요청 매개변수 받기
 
-[3. thymeleaf를 통해 레이아웃 만들기]
+[3. thymeleaf, Bootstrap을 통해 레이아웃 만들기]
 ---
 1. Bootstrap[반응형 웹 제작을 도와주는 프레임워크](https://getbootstrap.com/)을 이용하여 반응형 웹 페이지 구성하기 **완료**
 	1. [기본템플릿](https://getbootstrap.com/docs/4.5/examples/starter-template/) 적용  - index.html
@@ -28,13 +28,38 @@
 
 [4. JPA, MySQL을 이용해 게시판 조회하기] [JPA<->mybatis](https://jar100.tistory.com/25)
 ---
+	```
+	*ORM (Object Relational Mapping) 무엇인가?
+
+	RDB 테이블을 객체지향적으로 사용하기 위한 기술입니다. RDB 은 객체지향적 (상속, 다형성, 레퍼런스, 오브젝트 등)으로 접근하기 쉽지 않습니다.
+	때문에 ORM을 사용해 오브젝트와 RDB 사이에 객체지향적으로 다루기 위한 기술입니다.
+
+
+	*JPA (Java Persistence API) 무엇인가?
+
+	ORM 전문가가 참여한 EJB 3.0 스펙 작업에서 기존 EJB ORM이던 Entity Bean을 JPA라고 바꾸고 
+	JavaSE, JavaEE를 위한 영속성(persistence) 관리와 ORM을 위한 표준 기술입니다. 
+	JPA는 ORM 표준 기술로 Hibernate, OpenJPA, EclipseLink, TopLink Essentials과 같은 구현체가 있고 이에 표준 인터페이스가 바로 JPA입니다.
+
+
+	*HIBERNATE 무엇인가?
+	
+	Boss에서 개발한 ORM(Object Relational Mapping) 프레임워크 입니다.
+
+	*Hibernate 장점
+
+	Hibernate는 특정 클래스에 매핑되어야 하는 데이터베이스의 테이블에 대한 관계 정의가 되어 있는 XML 파일의 메타데이터로 객체관계 매핑을 간단하게 수행시킵니다.
+	Hibernate를 사용하면 데이터베이스가 변경되더라도 SQL 스크립트를 수정하는등의 작업을 할 필요가 없습니다.
+	애플리케이션에서 사용되는 데이터베이스를 변경시키고자 한다면 설정파일의 dialect 프로퍼티를 수정함으로서 쉽게 처리할 수 있습니다.
+	Hibernate는 MySQL, Oracle, Sybase, Derby, PostgreSQL를 포함한 많은 데이터베이스를 지원하며 POJO기반의 모델과도 원활하게 동작합니다.
+	```
 1. MySQL 테이블 생성
 	1. springboot_personal_project 스키마 생성
 	2. 사용자 계정(sbadmin) 추가 하여 해당 계정으로 mysql connection
 	3. 게시판 테이블(board) 생성
 
 2. Spring Boot에서 mysql 데이터소스 설정
-	1. [jap의존성추가](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa)
+	1. [jpa의존성추가](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa)
 	**JPA를 구현한 것중 가장 유명한 hibernate를 사용**
 	2. [mysql 의존성 추가](https://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.21)
 	3. application.properties에 mysql [데이터소스](http://blog.naver.com/PostView.nhn?blogId=ndarkness75&logNo=220991437798&categoryNo=0&parentCategoryNo=8&viewDate=&currentPage=1&postListTopCurrentPage=1&from=postView) 설정
@@ -44,7 +69,7 @@
 	You must configure either the server or JDBC driver (via the serverTimezone configuration property) to use a more specifc time zone value if you want to utilize time zone support.
 	[원인 :  MySQL 버전 5.1.23보다 높은 버전을 사용하면 MySQL 타임존의 시간표현 포맷이 달라져서 connector 에서 인식을 하지 못한다]
 	[해결방법](https://irerin07.tistory.com/14)
-	1. mysql 데이터 소스 url 맨뒤에 "스키마이름?" 뒤에
+	1. application.properties의 mysql 데이터 소스 url 맨뒤인 '스키마이름?' 뒤에
 	useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 	추가
 	2. MySQL 버전을 5.1.23으로 낮추기
@@ -52,9 +77,18 @@
 
 3. Model, Repository 클래스 생성 및 어노테이션 설정
 	1. Model (Board Class) 추가
-		- 클래스의 @Entity, PK에 해당하는 값의 @ID @GeneratedValue(strategy = GenerationType.IDENTITY) 설정
+		- 클래스의 @Entity 추가
+		- PK에 해당하는 값의 @ID, @GeneratedValue(strategy = GenerationType.IDENTITY) 설정
 	2. Repository (BoardRepository Interface) 추가 [참고](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
+		- BoardRepository는  JpaRepository interface를 상속받는다
+		```java
+		@Repository
+		public interface BoardRepository extends JpaRepository<Board, Long> {
+		  //JPA 규칙에 따라 인터페이스만 정의하면 JPA가 알아서 조회
+		}
+		```
 	3. BoardController 수정
+		- BoardRepository를  @Autowired로 의존성 주입하여 데이터 접근 사용
 	4. list.html 수정 [참고](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
 
 4. 게시판 데이터 조회 후 화면에 출력
