@@ -89,11 +89,25 @@
 		```
 	3. BoardController 수정
 		- BoardRepository를  @Autowired로 의존성 주입하여 데이터 접근 사용
-	4. list.html 수정 [참고](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
+	4. Front : list.html 수정 [참고](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
+
 
 4. 게시판 데이터 조회 후 화면에 출력
 	1. bootstrap에서 [테이블 레이아웃](http://bootstrapk.com/examples/theme/) 이용
 	2. thymeleaf 리스트 이용
+		- simple expressions 사용
+		```html
+		<!--Variable Expressions:  ${...} // controller 에서 전달해주는 모델(객체) 받기-->
+		<!--Link URL Expressions:  @{...} // 현재 html 위치에 맞게 classpath 자동 적용됨-->
+		
+		<!-- controller에서 담은 boards 이름의 모델 객체(리스트) 받기 -->
+		<tr th:each="board : ${boards}">
+		 <!-- list각 entry를 board이름으로 받아서 id 속성 값 사용 -->
+              	 <td th:text="${board.id}">제목</td>
+             			.
+			.
+			.
+		```
 	3. 버튼 url 연결 안됨 -> 태그변경(button->a)으로 [해결](https://ofcourse.kr/html-course/a-%ED%83%9C%EA%B7%B8) 
 
 [5. thymleaf에서 form 전송하기]
@@ -109,7 +123,7 @@
 
 	4. 게시판 글 수정 
 		1. list.html에서 title 부분 [파라미터를 통해 링크연결](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
-		2. GETMapping (/form)에 파라미터 전달받기(@RequestParam 이용)
+		2. GETMapping (/form)에 폼에서 전달한 파라미터 전달받기(@RequestParam 이용)
 		3. POSTMapping 에서 form.html에서 전달 한 model을 받아 key값으로 저장하기 때문에 controller에 key값을 전달하기 위해 form.html의 id값 hidden으로 전달 
 
 2. form 유효값 체크할수 있는 Validator 작성하기
@@ -169,10 +183,10 @@
 		```
 		5. 검색 문자를 통해 해당하는 값 받기 위해 BoardRepository.java 수정
 			- [JPA Containing](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
-			```java
-			//파라미터와 일치하는 데이터 page로 반환
-			Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
-			```
+		```java
+		//파라미터와 일치하는 데이터 page로 반환
+		Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
+		```
 		6. BoardController.java @GetMapping("/list") 에서 5. 이용
 		```java
 		Page<Board> boards = boardRepository.findByTitleContainingOrContentContaining(searchText,searchText,pageable)
