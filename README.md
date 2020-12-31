@@ -53,6 +53,7 @@
 	애플리케이션에서 사용되는 데이터베이스를 변경시키고자 한다면 설정파일의 dialect 프로퍼티를 수정함으로서 쉽게 처리할 수 있습니다.
 	Hibernate는 MySQL, Oracle, Sybase, Derby, PostgreSQL를 포함한 많은 데이터베이스를 지원하며 POJO기반의 모델과도 원활하게 동작합니다.
 	```
+![image](https://user-images.githubusercontent.com/60174144/103418511-5965ef00-4bd2-11eb-9f7d-20b53e12c5d2.png)
 1. MySQL 테이블 생성
 	1. springboot_personal_project 스키마 생성
 	2. 사용자 계정(sbadmin) 추가 하여 해당 계정으로 mysql connection
