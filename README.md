@@ -1,6 +1,6 @@
 # Spring-boot-Personal_Project
 ## 스프링부트로 웹 출시하기
-## SpringBoot, thymeleaf, [Bootstrap](https://getbootstrap.com/docs/4.4/getting-started/introduction/), JPA, MySQL, Spring Security
+### 기술스택 : SpringBoot, thymeleaf, [Bootstrap](https://getbootstrap.com/docs/4.4/getting-started/introduction/), JPA, MySQL, Spring Security
 
 ---
 [1.Spring Boot 환경세팅]
