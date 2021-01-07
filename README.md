@@ -330,6 +330,11 @@
 	- user_role(user_id,role_id) [PK : user_id,role_id], [FK : user_id(user참조), role_id(role참조)]
 
 4. JDBC mysql 인증 설정 [샘플예제참고](https://www.baeldung.com/spring-security-jdbc-authentication)
+	- *시큐리티에서 사용자, 권한 관련 DB는 Config 클래스에서 직접 처리
+		- 다른방법으로 @Service단에서 UserDetailsService 인터페이스를 구현하여 인증처리 가능
+	- **SecurityConfig에서 AuthenticationManagerBuilder를 주입해서 인증에 대한 처리**
+	- 만든 DB의 User테이블에 대해  jdbcAuthentication 설정
+	* 사용자가 입력한 id/pw와 DB(User테이블)의 내용을 비교
 	```java
 	@Autowired
 	// application.properties에 있는 정보를 인스턴스로 받아온다.
@@ -337,14 +342,13 @@
 
 	/**
 	* 참고
-	* Authentication : 로그인의 관한 설정
-	* Authroization : 권한의 관한 설정
+	* Authentication : 로그인의 관한 설정 : 로그인 하는 과정을 의미
+	* Authroization : 권한의 관한 설정 : 허용(Access) 하는 것을 의미
 	*/
-	@Autowired
-	//만든 User테이블을 AuthenticationManagerBuilder 설정을 통해 스프링이 알아서 인증처리
+	@Autowired 
 	public void configureGlobal(AuthenticationManagerBuilder auth) 
 	  throws Exception {
-	    auth.jdbcAuthentication()
+	    auth.jdbcAuthentication() // 권한 방식 jdbcAuthentication으로 지정
 	      .dataSource(dataSource) //스프링이 해당 dataSource를 사용하여 인증처리
 	      .passwordEncoder(passwordEncoder()) // 스프링에서 제공하는 passwordEncoder 적용하여 알아서 pw 암호화
 	      .usersByUsernameQuery("select username,password,enabled "
@@ -362,7 +366,17 @@
 	    return new BCryptPasswordEncoder();
 	}
 	```
+	```java
+	* AuthenticationManagerBuilder : 인증 매니저를 생성하는 빌더
+	  - 메모리상 정보를 이용하거나, JDBC, LDAP등의 정보를 이용해서 인증 처리가 가능
 
+	* authoritiesByUsernameQuery(sql) : 권한을 불러오는 쿼리를 작성
+	  - 출력결과는 [사용자이름], [권한명]을 순서대로 지정
+
+	* UsersByUsernameQuery(sql) : 사용자 목록을 가져오는 쿼리를 지정
+	  - 출력결과는  [사용자이름], [비밀번호], [Enabled] 3개를 순서대로 지정
+	```
+	
 5. 로그인 화면 만들기
 	- [login.html](https://getbootstrap.com/docs/4.4/examples/sign-in/)
 	- id와 pw 의 input에서 name 속성 추가 + [error처리 코드](https://spring.io/guides/gs/securing-web/) 추가
@@ -515,6 +529,20 @@
 **Security 간단 정리**
 ---
 ![Security정리](https://user-images.githubusercontent.com/60174144/98073146-04944980-1eab-11eb-9ff7-0fa492de59d4.png)
+
+![spring-Security](https://user-images.githubusercontent.com/60174144/103727757-6d20b380-501f-11eb-9ec5-de0a34e9dabb.png)
+```
+* 모든 인증은 인증 매니저를 통해 이루어 진다
+* 인증 매니저를 생성하기 위해서는 인증 매니저 빌드(AuthenticationManagerBuilder)를 이용
+* 인증 매니저를 이용해 인증이라는 작업을 수행
+* 인증 매니저들은 인증/인가를 위한 UserDetailsService를 통해서 필요한 정보들을 가져온다
+* UserDetails는 사용자의 정보 + 권한 정보들의 묶음
+* Authentication - Principal과 GrantAuthority 제공 이를 통해 현재 인증된 객체를 가져올 수 있다.
+   - Principal
+      : “누구"에 해당하는 정보. 
+      : UserDetailsService에서 리턴한 그 객체.
+      : 객체는 UserDetails 타입. 
+```
 ---
 
 [9. JPA를 이용하여 @OneToMany 관계 설정하기]
@@ -554,14 +582,15 @@
 	-> 사용자가보낸 인증정보는 절대 믿어선 안되므로 서버쪽에서 가지고 있는 인증 정보를 활용해야한다 
 	-> Controller에서 직접 Board의 user_id 확인 후 담아준다 
 	```
-	- 현재 로그인 한 사용자 정보 받아오기 [Spring Security의 Authentication 활용](https://dzone.com/articles/how-to-get-current-logged-in-username-in-spring-se)
+	- cf.현재 로그인 한 사용자 정보 받아오기 2개 방법 [Spring Security의 Authentication 활용](https://dzone.com/articles/how-to-get-current-logged-in-username-in-spring-se)
 		```java
 		* 첫번째 Controller에서 매개변수로 받아오기 [해당 프로젝트에서 이용]
 		    @PostMapping("/form")
     		    public String create(@Valid Board board,
-                         	BindingResult bindingResult,
-                         	Authentication authentication){ // authentication에 알아서 인증정보가 담겨온다.
-
+                         		BindingResult bindingResult,
+                         		Authentication authentication){ 
+			// authentication에 알아서 현재 인증된 객체의 정보가 담겨온다.
+	
 		* 두번째 매개변수가 아닌 SecurityContextHolder.getContext 전역변수 활용하기
 		    Authentication a = SecurityContextHolder.getContext().getAuthentication();
 		    String user_name = a.getName();
