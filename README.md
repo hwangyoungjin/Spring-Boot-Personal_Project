@@ -233,6 +233,7 @@
 3. 정리
 	1. RestAPI
 	- EndPoint (API가 서버에서 리소스에 접근할 수 있도록 가능하게 하는 URL)
+
 	| Methods | Urls | Actions |
 	|---|:---:|:---:|
 	| GET | /api/boards | 게시판(페이지로 변환) 반환 |
