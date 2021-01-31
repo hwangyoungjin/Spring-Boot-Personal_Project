@@ -39,32 +39,6 @@
 
 [4. JPA, MySQL을 이용해 게시판 조회하기] [JPA<->mybatis](https://jar100.tistory.com/25)
 ---
-	```
-	*ORM (Object Relational Mapping) 무엇인가?
-
-	RDB 테이블을 객체지향적으로 사용하기 위한 기술입니다. RDB 은 객체지향적 (상속, 다형성, 레퍼런스, 오브젝트 등)으로 접근하기 쉽지 않습니다.
-	때문에 ORM을 사용해 오브젝트와 RDB 사이에 객체지향적으로 다루기 위한 기술입니다.
-
-
-	*JPA (Java Persistence API) 무엇인가?
-
-	ORM 전문가가 참여한 EJB 3.0 스펙 작업에서 기존 EJB ORM이던 Entity Bean을 JPA라고 바꾸고 
-	JavaSE, JavaEE를 위한 영속성(persistence) 관리와 ORM을 위한 표준 기술입니다. 
-	JPA는 ORM 표준 기술로 Hibernate, OpenJPA, EclipseLink, TopLink Essentials과 같은 구현체가 있고 이에 표준 인터페이스가 바로 JPA입니다.
-
-
-	*HIBERNATE 무엇인가?
-	
-	Boss에서 개발한 ORM(Object Relational Mapping) 프레임워크 입니다.
-
-	*Hibernate 장점
-
-	Hibernate는 특정 클래스에 매핑되어야 하는 데이터베이스의 테이블에 대한 관계 정의가 되어 있는 XML 파일의 메타데이터로 객체관계 매핑을 간단하게 수행시킵니다.
-	Hibernate를 사용하면 데이터베이스가 변경되더라도 SQL 스크립트를 수정하는등의 작업을 할 필요가 없습니다.
-	애플리케이션에서 사용되는 데이터베이스를 변경시키고자 한다면 설정파일의 dialect 프로퍼티를 수정함으로서 쉽게 처리할 수 있습니다.
-	Hibernate는 MySQL, Oracle, Sybase, Derby, PostgreSQL를 포함한 많은 데이터베이스를 지원하며 POJO기반의 모델과도 원활하게 동작합니다.
-	```
-![image](https://user-images.githubusercontent.com/60174144/103418511-5965ef00-4bd2-11eb-9f7d-20b53e12c5d2.png)
 1. ### MySQL 테이블 생성
 	1. #### springboot_personal_project 스키마 생성
 	2. #### 사용자 계정(sbadmin) 추가 하여 해당 계정으로 mysql connection
@@ -213,7 +187,7 @@
 
 **게시판 데이터 조회 + 생성 + 수정 과정 form 정리**
 ---
-![Form 동작 과정](https://user-images.githubusercontent.com/60174144/95597932-3f60b880-0a8a-11eb-8bd9-9609a5666eb7.png)
+<img src="https://user-images.githubusercontent.com/60174144/95597932-3f60b880-0a8a-11eb-8bd9-9609a5666eb7.png" width="50%" height="50%">
 
 [7. JPA이용한 RESTful API 작성]
 ---
@@ -337,6 +311,7 @@
 	```
 
 3. ### DB 사용자,권한 테이블 생성 **user_role : User와 Role테이블 ManyToMany**
+	- <img src="https://user-images.githubusercontent.com/60174144/106380751-a28aa800-63f7-11eb-9990-8c7d33d7cb94.png" width="50%" height="50%">
 	```java
 	- user(id,username,password,enabled) [ PK : id ]
 	- role(id, name) [PK : id]
@@ -542,10 +517,11 @@
 ---
 **Security 간단 정리**
 ---
-![Security정리](https://user-images.githubusercontent.com/60174144/98073146-04944980-1eab-11eb-9ff7-0fa492de59d4.png)
+<img src="https://user-images.githubusercontent.com/60174144/98073146-04944980-1eab-11eb-9ff7-0fa492de59d4.png" width="50%" height="50%">
 
-![spring-Security](https://user-images.githubusercontent.com/60174144/103727757-6d20b380-501f-11eb-9ec5-de0a34e9dabb.png)
-```
+<img src="https://user-images.githubusercontent.com/60174144/103727757-6d20b380-501f-11eb-9ec5-de0a34e9dabb.png" width="50%" height="50%">
+
+```java
 * 모든 인증은 인증 매니저를 통해 이루어 진다
 * 인증 매니저를 생성하기 위해서는 인증 매니저 빌드(AuthenticationManagerBuilder)를 이용
 * 인증 매니저를 이용해 인증이라는 작업을 수행
@@ -562,6 +538,7 @@
 [9. JPA를 이용하여 @OneToMany 관계 설정하기]
 ---
 ##### One(게시자) To Many(게시글) 
+- <img src="https://user-images.githubusercontent.com/60174144/106380651-11b3cc80-63f7-11eb-9e8e-6c5f5eb17aa0.png" width="50%" height="50%">
 ---
 1. ### @ManyToOne 어노테이션을 이용하여 Board 조회시 User테이블 조회 하도록 설정하기
 	1. #### Board클래스의 User필드 추가
