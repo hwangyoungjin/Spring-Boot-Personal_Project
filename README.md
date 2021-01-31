@@ -11,7 +11,7 @@
 6. #### [JPA를 이용한 페이지 처리 및 검색](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#6-jpa를-이용한-페이지-처리-및-검색)
 7. #### [JPA이용한 RESTful API 작성](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#7-jpa이용한-restful-api-작성)
 8. #### [Spring Security 활용해서 login,register,logout](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#8-spring-security-활용해서-loginregisterlogout)
-9. #### [JPA를 이용하여 @OneToMany 관계 설정하기](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#9-jpa를-이용하여-onetomany-관계-설정하기)
+9. #### [JPA를 이용하여 @OneToMany 관계 설정과 Cascade, OrphanRemoval 속성 활용](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#9-jpa를-이용하여-onetomany-관계-설정과-CascadeOrphanRemoval-속성-활용)
 10. 
 ---
 [1.Spring Boot 환경세팅]
@@ -60,6 +60,15 @@
 	추가
 	2. MySQL 버전을 5.1.23으로 낮추기
 	```
+	4. #### JPA의 hibernate가 실행되는 쿼리 확인을 위해 application.properties에 코드 추가
+	```java
+	# 실행되는 sql 확인
+	spring.jpa.show-sql=true 
+	# sql 깔끔하게 보기
+	spring.jpa.properties.hibernate.format_sql=true
+	# sql '?' 에 들어가는 값 확인 가능
+	logging.level.org.hibernate.type.descriptor.sql=trace
+	```
 
 3. ### Model, Repository 클래스 생성 및 어노테이션 설정
 	1. #### Model (Board Class) 추가
@@ -90,9 +99,9 @@
 		<tr th:each="board : ${boards}">
 		 <!-- list각 entry를 board이름으로 받아서 id 속성 값 사용 -->
               	 <td th:text="${board.id}">제목</td>
-             			.
-			.
-			.
+             			~
+				~
+				~
 		```
 	3. #### 버튼 url 연결 안됨 -> 태그변경(button->a)으로 [해결](https://ofcourse.kr/html-course/a-%ED%83%9C%EA%B7%B8) 
 
@@ -311,7 +320,7 @@
 	```
 
 3. ### DB 사용자,권한 테이블 생성 **user_role : User와 Role테이블 ManyToMany**
-	- <img src="https://user-images.githubusercontent.com/60174144/106380751-a28aa800-63f7-11eb-9990-8c7d33d7cb94.png" width="50%" height="50%">
+	- <img src="https://user-images.githubusercontent.com/60174144/106381266-e0d59680-63fa-11eb-8087-4b8610d14041.png" width="50%" height="50%">
 	```java
 	- user(id,username,password,enabled) [ PK : id ]
 	- role(id, name) [PK : id]
@@ -535,24 +544,29 @@
 ```
 ---
 
-[9. JPA를 이용하여 @OneToMany 관계 설정하기]
+[9. JPA를 이용하여 @OneToMany 관계 설정과 Cascade, OrphanRemoval 속성 활용]
 ---
 ##### One(게시자) To Many(게시글) 
 - <img src="https://user-images.githubusercontent.com/60174144/106380651-11b3cc80-63f7-11eb-9e8e-6c5f5eb17aa0.png" width="50%" height="50%">
 ---
-1. ### @ManyToOne 어노테이션을 이용하여 Board 조회시 User테이블 조회 하도록 설정하기
+1. ### @ManyToOne 어노테이션을 이용하여 Board 조회시 게시자 확인을 위해 User테이블 같이 조회 하도록 설정하기
 	1. #### Board클래스의 User필드 추가
 	```java
-	@ManyToOne
-	//이때 name은 어떠한 col이 User테이블과 연결이 될지결정,
-	@JoinColumn(name = "user_id")
-	//해당 변수는 board의 id와 연결된 user객체를 의미
-    	private User user;
+	    @ManyToOne
+	    @JoinColumn(name = "user_id") //User테이블의 pk를 참조하는 Board 테이블의 FK 이름
+	    private User user; //user_id는 User테이블의 PK를 참조하게 된다. 
 	```
-	2. #### Board 테이블에서 User테이블과 연결될 **user_id** 컬럼 추가 
+	2. #### DB   Board 테이블에서 User테이블과 연결될 **user_id** 컬럼 추가 
 		- (해당컬럼은 FK으로 user테이블의 id값 참조)
-	3. #### list.html에서 작성자 부분에 타임리프 board.user_id 추가
+	3. #### list.html에서 작성자 부분에 board.user_id 값 추가
 	```html
+	<tbody>
+	<tr th:each="board : ${boards}">
+	 <td th:text="${board.user.username}">young</td>
+	</tr>
+	</tbody>
+	```
+	```java
 	list.html 파싱할때 에러발생
 	[에러문구]
 	Caused by: org.thymeleaf.exceptions.TemplateProcessingException: Exception evaluating SpringEL expression: "board.user.username" (template: "board/list" - line 44, col 19)
@@ -567,11 +581,12 @@
      	   	this.user = user;
     	} 
 	```
-2. ### 게시판의 글 작성시 작성자의 로그인한 username들어가도록 설정
+2. ### 게시판의 글 작성시 Board테이블에 작성자 이름들어가도록 설정
 	```java
-	form에서 user_id를 직접 전달 하게 되면 다른사람이 개발자도구를 활용해서 다른사람의 user_id를 보낼 수 있다 
-	-> 사용자가보낸 인증정보는 절대 믿어선 안되므로 서버쪽에서 가지고 있는 인증 정보를 활용해야한다 
-	-> Controller에서 직접 Board의 user_id 확인 후 담아준다 
+	* form에서 작성자(username)를 컨트롤러에게 파라미터로 직접 전달 하게 되면 
+	  다른사람이 개발자 도구를 활용해서 다른사람의 username를 보낼 수 있다. 
+	-> 사용자가보낸 인증정보는 절대 믿어선 안되므로 서버쪽에서 가지고 있는 인증 정보를 활용해야 한다 
+	-> Controller에서 SpringSecurity를 활용하여 username 받아온다. 
 	```
 	- cf.현재 로그인 한 사용자 정보 받아오기 2개 방법 [Spring Security의 Authentication 활용](https://dzone.com/articles/how-to-get-current-logged-in-username-in-spring-se)
 		```java
@@ -586,13 +601,216 @@
 		    Authentication a = SecurityContextHolder.getContext().getAuthentication();
 		    String user_name = a.getName();
 		```
-
 	1. #### Controller에서 현재 사용자의 username을 Authentication을 이용하여 받고 이를 service를 통해 저장 
-	2. #### BoardService 만들어서 username과 board를 매개변수로 받고 username에서 user찾아서 Board에 넣는다
-	3. #### BoardRepository에서 해당 board 저장 
+		```java
+		* 첫 번째 방법 이용
+		    @PostMapping("/form")
+		    public String create(@Valid Board board,
+	                         BindingResult bindingResult,
+	                         Authentication authentication){
 	
-3. ### @OneToMany, @ManyToOne 어노테이션을 이용하여 양방향 매핑 설정
-4. ### Cascade, OrphanRemoval 속성을 이용하여 매핑된 데이터 조작
+		        String username = authentication.getName(); // 사용자의 유저네임을 받아온다.
+		        System.out.println(board.getTitle()+" , "+ board.getContent());
+		        boardService.save(username,board);
+		        return "redirect:/board/list"; // GET(board/list)으로 위임
+		}
+		```
+	2. #### BoardService 만들어서 username과 board를 매개변수로 받고 username에서 user찾아서 Board에 넣는다.
+		```java
+		@Service
+		public class BoardService {
+		
+		    @Autowired
+		    private BoardRepository boardRepository;
+
+		    @Autowired
+		    private UserRepository userRepository; // user정보를 가져오기 위해
+		
+		    public Board save(String username, Board board){
+		        User user = userRepository.findByUsername(username); // username에 해당하는 user 받아서
+		        board.setUser(user); // 해당 board객체 user필드 에 저장
+		        return boardRepository.save(board); // DB에 저장
+		    }
+		}
+		```	
+	3. #### BoardRepository에서 해당 board 저장
+		```java
+		@Repository
+		public interface UserRepository extends JpaRepository<User, Long> {
+
+		    User findByUsername(String username);
 	
+		}
+		```
+	
+3. ### PostMan으로 User조회시 Board 조회하도록 테스트 할 UserApiController 만들기
+	```java
+	@RestController
+	@RequestMapping("/api")
+	public class UserApiController {
+
+	    @Autowired
+	    private UserRepository repository;
+
+	    @GetMapping("/users")
+	    List<User> all() {
+	            return repository.findAll();
+	    }
+	```
+4. ### 양방향 맵핑을 위하여 User 엔티티에 @OneToMany 어노테이션 붙이기
+	```java
+	    @OneToMany(mappedBy = "user") //many 쪽인 Board의 User객체 필드명
+	    private List<Board> boards = new ArrayList<>();
+	```
+5. ### PostMan으로 요청하기
+	1. #### 로그인 없이 접근 가능 하도록 SpringSecuriy config에 "/api/**" 추가
+	```java
+	 @Override
+	    protected void configure(HttpSecurity http) throws Exception {
+	        http
+	                //어떤 보안설정을 할것인지 정한다.
+	                .authorizeRequests()
+	                    //css 경로 추가
+	                    // permitAll을 통해 누구나 접근 할 수 있다고 설정
+	                    .antMatchers("/","/account/register","/css/**","/api/**").permitAll()
+				       	~
+				       	~
+				       	~
+	```
+	2. #### postMan 에서 **localhost:8080/api/users** 요청
+		- <img src="https://user-images.githubusercontent.com/60174144/106385913-edb3b380-6415-11eb-9041-3a6b49f7da2f.png" width="40%" height="40%">
+		```java
+		*문제*
+		- User의 Role값 불러올때 Role에서 또 User불러오는 재귀적 현상 발생
+		- 동일하게 User에서 boards 불러올때 각 board의 User를 불러오는 재귀적 현상도 발생
+		*해결*
+		- Role클래스 User필드에 @JsonIgnore 붙여주기
+		  : 데이터 주고 받을때 Role 값에서 User필드값은 Ignore 된다.
+		- 동일하게 Board클래스 User필드에 @JsonIgnore 붙여주기
+		  : 데이터 주고 받을때 Board 값에서 User필드값은 Ignore 된다.
+		
+		@Entity
+		public class Role {
+		    @ManyToMany(mappedBy = "roles")
+		    @JsonIgnore // 데이터 주고 받을때 Role 값에서 User필드값은 Ignore
+		    private List<User> users;
+		}		
+		===================================
+		@Entity
+		public class Board {
+		    @ManyToOne
+		    @JoinColumn(name = "user_id") 
+		    @JsonIgnore // 데이터 주고 받을때 Board 값에서 User필드값은 Ignore
+		    private User user; 
+		}
+		```
+		- **결과** : 재귀 현상 사라짐
+		- <img src="https://user-images.githubusercontent.com/60174144/106386667-6bc58980-6419-11eb-8f42-89bca056c2de.png" width="40%" height="40%">
+		
+6. ### Cascade 속성 설정을 통해 User저장시 관련 Board도 Board테이블에 반영되도록
+	```java
+	* User 저장(상태변화)시 Board에도 저장(상태변화)되도록 User엔티티 Board필드에 cascade 속성 추가
+	    
+	    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) //many 쪽인 Board의 User객체 필드명
+	    private List<Board> boards = new ArrayList<>();
+	``` 
+
+	1. #### UserApiController 에 PostMan으로 Board 값 넘겨 User저장할 코드 추가
+		```java
+		    @PutMapping("/users/{id}")
+		    User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
+		
+		        return repository.findById(id)
+		                .map(user -> { //User 테이블에서 조회한 user에 대해
+		                    user.setBoards(newUser.getBoards());//json으로 받은 newUser의 board 정보 저장
+		                    for(Board board : user.getBoards()){//해당 board 정보에 대해
+		                        board.setUser(user); // 다시 user에 저장
+		                    }
+		                    return repository.save(user); // DB에 user저장 -> cascade로 board에도 저장된다.
+		                })
+			                .orElseGet(() -> {
+	             	       newUser.setId(id);
+	             	       return repository.save(newUser);
+	             	   });
+	  	  }		
+		```
+
+	- #### CSRF 개념
+	```java
+	- PostMan 에서 PUT 요청 보내면 접근 할수 없는 에러가 난다
+	- 이것은 SpringSecurity에서 제공하는 CSRF 때문
+	- CSRF 공격이란 (Cross Site Request Forgery)은 웹 어플리케이션 취약점 중 하나로 인터넷 사용자(희생자)가 자신의 의지와는 무관하게 공격자가 의도한 행위(수정, 삭제, 등록 등)를 특정 웹사이트에 요청하게 만드는 공격
+	- SpringSecurity에서 자동으로 csrf 키를 생성하여 인증을 한다
+	- 테스트를 위해 해당 기능을 끄기 위해 WebSecurityConfig 클래스의 코드 수정
+	- csrf().disable() 를 통해 기능 끄기
+
+	 @Override
+	    protected void configure(HttpSecurity http) throws Exception {
+	        http
+	                .csrf().disable()
+			~
+			~
+			~
+	``` 
+
+	2. #### PostMan 에서 board값 넘기고 workbench에서 값 확인
+		- <img src="https://user-images.githubusercontent.com/60174144/106388643-e47d1380-6422-11eb-876a-6ab1123ea086.png" width="40%" height="40%">
+		- <img src="https://user-images.githubusercontent.com/60174144/106388718-2a39dc00-6423-11eb-9fa4-a1587ebd8607.png" width="40%" height="40%">
+
+	3. #### 같은방식으로 UserApiController에 delete도 추가
+		```java
+		* cascade.ALL로 인해 User 삭제시 관련 데이터 Board 테이블에서도 삭제된다.
+		
+		  @DeleteMapping("/users/{id}")
+		    void deleteUser(@PathVariable Long id) {
+		        repository.deleteById(id);
+		    }
+		```
+7. ### OrphanRemoval 속성을 이용하여 매핑된 데이터 조작
+	```java
+	[오너 개념 참고]
+	- 엔티티맵핑에서 둘 중 하나는 반드시 오너(=주인)이다.
+	- 단방향 관계에선 관계를 정의한 쪽이 오너이다.
+	- 양방향 ManyToOne관계에선 보통 Many쪽이 오너이고 주인이 아닌 One쪽이 자식으로 mappedBy를 사용한다
+
+	[부모 자식 개념 참고]
+	- 참조하는곳이 하나인 엔티티 맵핑 관계 (@OneToOne과 @OneToMany)에서
+	- 참조하는쪽이 자식(즉 부모의 PK를 참조하는 FK를 가지고 있는 쪽이 자식)
+	- 참조당하는쪽이 부모
+	- ManyToOne에선 보통 Many인 엔티티가 자식, One인 자식이 부모
+	- [해당 프로젝트에선 Board가 자식, User가 부모]
+
+
+	* @엔티티맵핑(1:1, 1:n) 속성에서 OrphanRemoval 속성이란?
+	- 오너 개념 생각X
+	- 부모엔티티의 컬렉션에서 자식엔티티의 참조만 제거하면 자식엔티티가 자동으로 삭제되는 기능
+	  ( 부모 엔티티와 연관관계가 끊어진 자식 엔티티를 자동으로 삭제해주는 기능 )
+	  ( Orphan = 고아 )
+	- 참조하는 곳이 하나일 때만 사용 (@OneToOne과 @OneToMany에서만 사용 가능)
+	- 기본값은 false이며 부모에서 true 설정시 실행된다
+	- 부모에서 clear()를 통해 관계 끊으면 관련된 자식 삭제 된다.
+	- Ex> 해당 프로젝트의 양방향인 Board(자식), User(부모) 관계에서
+	    
+	       1. 부모인 User 엔티티 Board필드에 OrphanRemoval = true 로 설정
+	           @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true) //many 쪽인 Board의 User객체 필드명
+	           private List<Board> boards = new ArrayList<>();
+
+	       2. user객체 에서 clear() 사용하여 연결된 Board 데이터 삭제
+	         @PutMapping("/users/{id}")
+	            User replaceUser(@RequestBody User newUser, @PathVariable Long id) {
+	
+	                return repository.findById(id)
+	                        .map(user -> { //User 테이블에서 조회한 user에 대해
+	                                user.getBoard().clear(); // 연결된 자식관계 끊기 -> DB Board테이블에 해당 User 객체와 연결된 Board 객체 삭제된다
+	                                user.getBoard().addAll(newBoard.getBoards()); //json으로 받은 newUser의 board 정보 저장
+		                   for(Board board : user.getBoards()){//해당 board 정보에 대해
+	                                board.setUser(user); // 다시 user에 저장
+	                            }
+	                            return repository.save(user); // DB에 user저장 -> cascade로 board에도 저장된다.
+	                        })
+	       
+	[참고]
+	- CascadeType.ALL + orphanRemovel=true 이 두개를 같이 사용하게 되면 부모 엔티티가 자식의 생명주기를 모두 관리 
+	```
 	
 	

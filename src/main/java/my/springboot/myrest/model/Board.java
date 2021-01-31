@@ -1,6 +1,6 @@
 package my.springboot.myrest.model;
 
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,11 +18,9 @@ public class Board {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") //이때 name은 어떠한 col이 User테이블과 연결이 될지결정
-    private User user; //해당 변수는 board의 user_id와 연결된 user객체를 의미
-
-
-
+    @JoinColumn(name = "user_id") //User테이블의 pk를 참조하는 Board 테이블의 FK 이름
+    @JsonIgnore
+    private User user; //user_id는 User테이블의 PK를 참조하게 된다.
 
     public Long getId() {
         return id;

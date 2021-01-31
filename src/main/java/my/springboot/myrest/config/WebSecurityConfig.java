@@ -28,11 +28,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 //어떤 보안설정을 할것인지 정한다.
                 .authorizeRequests()
                     //css 경로 추가
                     // permitAll을 통해 누구나 접근 할 수 있다고 설정
-                    .antMatchers("/","/account/register","/css/**").permitAll()
+                    .antMatchers("/","/account/register","/css/**","/api/**").permitAll()
                     //Matching이 안된 요청은 모두 여기에 걸리고 authenticate(로그인)가 있어야만 볼 수 있도록
                     .anyRequest().authenticated()
                     .and()//이어서
@@ -58,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
          auth.jdbcAuthentication() // 로그인설정
                 .dataSource(dataSource) //스프링이 해당 dataSource를 사용하여 인증처리
                 .passwordEncoder(passwordEncoder()) // 스프링에서 제공하는 passwordEncoder 적용하여 알아서 pw 암호화
-                .usersByUsernameQuery("select username, password, enabled "
+                .usersByUsernameQuery("select username, password, enabled " 
                         + "from user "
                         + "where username = ?") // 파라미터에 알아서 username이 들어간다.
                 .authoritiesByUsernameQuery("select u.username, r.name " //권한의 관한 설점

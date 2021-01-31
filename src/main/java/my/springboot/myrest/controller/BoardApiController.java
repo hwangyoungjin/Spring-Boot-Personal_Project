@@ -35,7 +35,7 @@ public class BoardApiController {
     }
 
     @PostMapping("/boards")
-    Board newEmployee(@RequestBody Board newBoard) {
+    Board newBoard(@RequestBody Board newBoard) {
         return repository.save(newBoard);
     }
 
@@ -47,7 +47,7 @@ public class BoardApiController {
     }
 
     @PutMapping("/boards/{id}")
-    Board replaceEmployee(@RequestBody Board newBoard, @PathVariable Long id) {
+    Board replaceBoard(@RequestBody Board newBoard, @PathVariable Long id) {
 
         return repository.findById(id)
                 .map(board -> {
@@ -62,7 +62,7 @@ public class BoardApiController {
     }
 
     @DeleteMapping("/boards/{id}")
-    void deleteEmployee(@PathVariable Long id) {
+    void deleteBoard(@PathVariable Long id) {
         repository.deleteById(id);
     }
 }

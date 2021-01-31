@@ -20,8 +20,20 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"), // 해당테이블의 컬럼이름
             inverseJoinColumns = @JoinColumn(name = "role_id")) // 조인될 상대테이블(User가아닌)의 컬럼
     //user_role테이블은 User에겐 role_id가 추가된 형태
-
     private List<Role> roles = new ArrayList<>();
+
+    //양방향 설정
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true) //many 쪽인 Board의 User객체 필드명
+    private List<Board> boards = new ArrayList<>();
+
+
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
+    }
 
     public Long getId() {
         return id;
