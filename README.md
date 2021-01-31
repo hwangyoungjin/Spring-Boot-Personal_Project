@@ -1,30 +1,41 @@
 # Spring-boot-Personal_Project
 ## 스프링부트로 웹 출시하기
 ### 기술스택 : SpringBoot, thymeleaf, [Bootstrap](https://getbootstrap.com/docs/4.4/getting-started/introduction/), JPA, MySQL, Spring Security
-
+---
+### 목차
+1. #### [Springboot 환경세팅](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#1spring-boot-환경세팅)
+2. #### [thymeleaf를 통해 화면 작성](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#2-thymeleaf를-통해-화면-작성)
+3. #### [thymeleaf, Bootstrap을 통해 레이아웃 만들기](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#3-thymeleaf-bootstrap을-통해-레이아웃-만들기)
+4. #### [JPA, MySQL을 이용해 게시판 조회하기](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#4-jpa-mysql을-이용해-게시판-조회하기-jpa-mybatis)
+5. #### [thymleaf에서 form 전송하기](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#5-thymleaf에서-form-전송하기)
+6. #### [JPA를 이용한 페이지 처리 및 검색](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#6-jpa를-이용한-페이지-처리-및-검색)
+7. #### [JPA이용한 RESTful API 작성](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#7-jpa이용한-restful-api-작성)
+8. #### [Spring Security 활용해서 login,register,logout](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#8-spring-security-활용해서-loginregisterlogout)
+9. #### [JPA를 이용하여 @OneToMany 관계 설정하기](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#9-jpa를-이용하여-onetomany-관계-설정하기)
+10. 
 ---
 [1.Spring Boot 환경세팅]
 ---
-1. Spring Boot 프로젝트(maven, java8, jar, web-dependency) [완료]
+1. ### Spring Boot 프로젝트(maven, java8, jar, web-dependency) [완료]
 
 [2. thymeleaf를 통해 화면 작성]
 ---
-1. thymeleaf, devtools 의존성 추가
-2. Visual Studio Code로 resource폴더 수정
-3. 실시간으로 디자인 볼 수 있도록 visual studio code에 LiveServer 확장프로그램 설치
-4. @RequestParam을 통해 url 요청 매개변수 받기
+1. ### thymeleaf, devtools 의존성 추가
+2. ### Visual Studio Code로 resource폴더 수정
+3. ### 실시간으로 디자인 볼 수 있도록 visual studio code에 LiveServer 확장프로그램 설치
+4. ### @RequestParam을 통해 url 요청 매개변수 받기
 
 [3. thymeleaf, Bootstrap을 통해 레이아웃 만들기]
 ---
-1. Bootstrap[반응형 웹 제작을 도와주는 프레임워크](https://getbootstrap.com/)을 이용하여 반응형 웹 페이지 구성하기 **완료**
-	1. [기본템플릿](https://getbootstrap.com/docs/4.5/examples/starter-template/) 적용  - index.html
-	2. [기본템플릿 예제 적용](https://getbootstrap.com/docs/4.5/examples/starter-template/)
-	3. 2의 [CSS 파일](https://getbootstrap.com/docs/4.5/examples/starter-template/starter-template.css) 추가	
-2. Fragment를 이용해서 공통 화면(**common.html**) 레이아웃 구성하기
-	1. templates/fragments/common.html을 추가하여 -> head와 body 공통부분처리 (th:fragment , th:replace 이용)
-	2. fragment의 parameter 이용하기 (ex. th:fragment="head(para)")
-	3. 게시판 list추가 -> board/list 이므로 th:href 이용
-	4. 상단 네비게이션 메뉴 condition에 따라 class 동적으로 추가 -> th:classappend 이용
+1. ### Bootstrap[반응형 웹 제작을 도와주는 프레임워크](https://getbootstrap.com/)을 이용하여 반응형 웹 페이지 구성하기 **완료**
+	1. #### [기본템플릿](https://getbootstrap.com/docs/4.5/examples/starter-template/) 적용  - index.html
+	2. #### [기본템플릿 예제 적용](https://getbootstrap.com/docs/4.5/examples/starter-template/)
+	3. #### 2의 [CSS 파일](https://getbootstrap.com/docs/4.5/examples/starter-template/starter-template.css) 추가	
+2. ### Fragment를 이용해서 공통 화면(**common.html**) 레이아웃 구성하기
+	1. #### templates/fragments/common.html을 추가하여 -> head와 body 공통부분처리 (th:fragment , th:replace 이용)
+	2. #### fragment의 parameter 이용하기 (ex. th:fragment="head(para)")
+	3. #### 게시판 list추가 -> board/list 이므로 th:href 이용
+	4. #### 상단 네비게이션 메뉴 condition에 따라 class 동적으로 추가 -> th:classappend 이용
 
 [4. JPA, MySQL을 이용해 게시판 조회하기] [JPA<->mybatis](https://jar100.tistory.com/25)
 ---
@@ -54,16 +65,16 @@
 	Hibernate는 MySQL, Oracle, Sybase, Derby, PostgreSQL를 포함한 많은 데이터베이스를 지원하며 POJO기반의 모델과도 원활하게 동작합니다.
 	```
 ![image](https://user-images.githubusercontent.com/60174144/103418511-5965ef00-4bd2-11eb-9f7d-20b53e12c5d2.png)
-1. MySQL 테이블 생성
-	1. springboot_personal_project 스키마 생성
-	2. 사용자 계정(sbadmin) 추가 하여 해당 계정으로 mysql connection
-	3. 게시판 테이블(board) 생성
+1. ### MySQL 테이블 생성
+	1. #### springboot_personal_project 스키마 생성
+	2. #### 사용자 계정(sbadmin) 추가 하여 해당 계정으로 mysql connection
+	3. #### 게시판 테이블(board) 생성
 
-2. Spring Boot에서 mysql 데이터소스 설정
-	1. [jpa의존성추가](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa)
-	**JPA를 구현한 것중 가장 유명한 hibernate를 사용**
-	2. [mysql 의존성 추가](https://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.21)
-	3. application.properties에 mysql [데이터소스](http://blog.naver.com/PostView.nhn?blogId=ndarkness75&logNo=220991437798&categoryNo=0&parentCategoryNo=8&viewDate=&currentPage=1&postListTopCurrentPage=1&from=postView) 설정
+2. ### Spring Boot에서 mysql 데이터소스 설정
+	1. #### [jpa의존성추가](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa)
+		- **JPA를 구현한 것중 가장 유명한 hibernate를 사용**
+	2. #### [mysql 의존성 추가](https://mvnrepository.com/artifact/mysql/mysql-connector-java/8.0.21)
+	3. #### application.properties에 mysql [데이터소스](http://blog.naver.com/PostView.nhn?blogId=ndarkness75&logNo=220991437798&categoryNo=0&parentCategoryNo=8&viewDate=&currentPage=1&postListTopCurrentPage=1&from=postView) 설정
 	```java
 	[time zone 관련 에러]
 	java.sql.SQLException: The server time zone value '´ëÇÑ¹Î±¹ Ç¥ÁØ½Ã' is unrecognized or represents more than one time zone. 
@@ -76,11 +87,11 @@
 	2. MySQL 버전을 5.1.23으로 낮추기
 	```
 
-3. Model, Repository 클래스 생성 및 어노테이션 설정
-	1. Model (Board Class) 추가
+3. ### Model, Repository 클래스 생성 및 어노테이션 설정
+	1. #### Model (Board Class) 추가
 		- 클래스의 @Entity 추가
 		- PK에 해당하는 값의 @ID, @GeneratedValue(strategy = GenerationType.IDENTITY) 설정
-	2. Repository (BoardRepository Interface) 추가 [참고](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
+	2. #### Repository (BoardRepository Interface) 추가 [참고](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
 		- BoardRepository는  JpaRepository interface를 상속받는다
 		```java
 		@Repository
@@ -88,14 +99,14 @@
 		  //JPA 규칙에 따라 인터페이스만 정의하면 JPA가 알아서 조회
 		}
 		```
-	3. BoardController 수정
+	3. #### BoardController 수정
 		- BoardRepository를  @Autowired로 의존성 주입하여 데이터 접근 사용
-	4. Front : list.html 수정 [참고](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
+	4. #### Front : list.html 수정 [참고](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
 
 
-4. 게시판 데이터 조회 후 화면에 출력
-	1. bootstrap에서 [테이블 레이아웃](http://bootstrapk.com/examples/theme/) 이용
-	2. thymeleaf 리스트 이용
+4. ### 게시판 데이터 조회 후 화면에 출력
+	1. #### bootstrap에서 [테이블 레이아웃](http://bootstrapk.com/examples/theme/) 이용
+	2. #### thymeleaf 리스트 이용
 		- simple expressions 사용
 		```html
 		<!--Variable Expressions:  ${...} // controller 에서 전달해주는 모델(객체) 받기-->
@@ -109,44 +120,44 @@
 			.
 			.
 		```
-	3. 버튼 url 연결 안됨 -> 태그변경(button->a)으로 [해결](https://ofcourse.kr/html-course/a-%ED%83%9C%EA%B7%B8) 
+	3. #### 버튼 url 연결 안됨 -> 태그변경(button->a)으로 [해결](https://ofcourse.kr/html-course/a-%ED%83%9C%EA%B7%B8) 
 
 [5. thymleaf에서 form 전송하기]
 ---
-1. Spring Boot, thymeleaf를 이용하여 form 전송 하고 JPA를 이용해서 DB에 데이터 추가, 수정
-	1. form.html 작성 [참고](https://araikuma.tistory.com/75)
-	2. [thymeleaf form 핸들링](https://spring.io/guides/gs/handling-form-submission/)
-	3. get->form[스프링부트form](https://spring.io/guides/gs/handling-form-submission/), [button vs input](https://aboooks.tistory.com/301)->post
+1. ### Spring Boot, thymeleaf를 이용하여 form 전송 하고 JPA를 이용해서 DB에 데이터 추가, 수정
+	1. #### form.html 작성 [참고](https://araikuma.tistory.com/75)
+	2. #### [thymeleaf form 핸들링](https://spring.io/guides/gs/handling-form-submission/)
+	3. #### get->form[스프링부트form](https://spring.io/guides/gs/handling-form-submission/), [button vs input](https://aboooks.tistory.com/301)->post
 	~~~html
 	[form에서 post 요청시 postMapping의 필드값이 null인 객체가 들어오는 문제 발생]
 	1. textarea안에 값 modeldata로 바인딩 안됨 -> 원인 모르겠음
 	~~~
 
-	4. 게시판 글 수정 
+	4. #### 게시판 글 수정 
 		1. list.html에서 title 부분 [파라미터를 통해 링크연결](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
 		2. GETMapping (/form)에 폼에서 전달한 파라미터 전달받기(@RequestParam 이용)
 		3. POSTMapping 에서 form.html에서 전달 한 model을 받아 key값으로 저장하기 때문에 controller에 key값을 전달하기 위해 form.html의 id값 hidden으로 전달 
 
-2. form 유효값 체크할수 있는 Validator 작성하기
-	1. [thymeleaf form Validating](https://spring.io/guides/gs/validating-form-input/)
-	2. 서버에서 클라이언트에서 보낸 데이터 체크 하기위해 VO객체(Board)에 @NotNull, @Size, @Valid 설정
+2. ### form 유효값 체크할수 있는 Validator 작성하기
+	1. #### [thymeleaf form Validating](https://spring.io/guides/gs/validating-form-input/)
+	2. #### 서버에서 클라이언트에서 보낸 데이터 체크 하기위해 VO객체(Board)에 @NotNull, @Size, @Valid 설정
 	- **@Size(message= "") 를 통해 에러메시지 설정**
 	```java
 	[javax에 있는 @NotNull, @Size, @Valid import 안됨]
 	pom.xml [dependency추가로 해결](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation/2.3.3.RELEASE)
 	```
 
-	3. POSTMapping 에 @Valid, BindingResult 추가
-	4. form.html에서 [에러있는경우 에러값 표시할 코드 부트스트랩 Server side용](https://getbootstrap.com/docs/4.4/components/forms/#validation) 추가
-	5. 4과정 에 [thymeleaf 에러처리부분](https://spring.io/guides/gs/validating-form-input/) 함께 추가
+	3. #### POSTMapping 에 @Valid, BindingResult 추가
+	4. #### form.html에서 [에러있는경우 에러값 표시할 코드 부트스트랩 Server side용](https://getbootstrap.com/docs/4.4/components/forms/#validation) 추가
+	5. #### 4과정 에 [thymeleaf 에러처리부분](https://spring.io/guides/gs/validating-form-input/) 함께 추가
 
-	6. 애노테이션이 아닌 Validator인터페이스를 통해 새로운 [Vaildator클래스](https://lazymankook.tistory.com/86) (BoardValidator) 만들기  
+	6. #### 애노테이션이 아닌 Validator인터페이스를 통해 새로운 [Vaildator클래스](https://lazymankook.tistory.com/86) (BoardValidator) 만들기  
 
 
 [6. JPA를 이용한 페이지 처리 및 검색]
 ---
-1. JPA의 Page 클래스를 이용해서 페이지 처리 & 검색 기능 구현
-	1. 게시판 글 수가 많아지면 처리할 페이지 처리(페이징)
+1. ### JPA의 Page 클래스를 이용해서 페이지 처리 & 검색 기능 구현
+	1. #### 게시판 글 수가 많아지면 처리할 페이지 처리(페이징)
 		1. [부트스트랩 Pagnation](https://getbootstrap.com/docs/4.4/components/pagination/#overview)
 		2. DB 모든데이터 page로 다 가져오기[Spring Data JAP-pageable](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
 		```java
@@ -172,7 +183,7 @@
 		4. index를 이용해서 해당 페이지 인 경우 버튼 diable - th:classappend
 		5. [page버튼 파라미터받아서 url 넣기- th:href]
 
-	2. 게시판 검색 기능 만들기
+	2. #### 게시판 검색 기능 만들기
 		1. [부트스트랩 검색 폼-inline](https://getbootstrap.com/docs/4.4/components/forms/)
 		2. [검색 form우측정렬할 부트스트랩 class 적용 -justify](https://getbootstrap.com/docs/4.4/utilities/flex/)
 		3. [검색 버튼 색 추가 할 부트스트랩 class 적용 - btn-light](https://getbootstrap.com/docs/4.4/components/buttons/#button-tags)
@@ -206,10 +217,10 @@
 
 [7. JPA이용한 RESTful API 작성]
 ---
-1. JPA이용해서 MySQL DB의 데이터 조작할 수 있는 컨트롤러 생성
-	1. RestController 생성 [스프링 REST 튜토리얼 참고](https://spring.io/guides/tutorials/rest/)
-	2. @GET, @POST, @GET{id}, @PUT{id}, @DELETE{id}
-	3. @GET의 파라미터 '제목' 받아서 검색(타임리프 uilt.StringUtils 이용)
+1. ### JPA이용해서 MySQL DB의 데이터 조작할 수 있는 컨트롤러 생성
+	1. #### RestController 생성 [스프링 REST 튜토리얼 참고](https://spring.io/guides/tutorials/rest/)
+	2. #### @GET, @POST, @GET{id}, @PUT{id}, @DELETE{id}
+	3. #### @GET의 파라미터 '제목' 받아서 검색(타임리프 uilt.StringUtils 이용)
 		1. @RequestParam으로 title,content 받기
 		2. BoardRepository 수정 [Spring JAP 참고](https://docs.spring.io/spring-data/jpa/docs/2.3.4.RELEASE/reference/html/#reference)
 		```java
@@ -223,15 +234,15 @@
 		```
 		3. RestController에서 findByTitleOrContent(title,content)을 통해 해당하는 객체 json으로 반환
 
-2. [PostMan](https://www.postman.com/downloads/)을 이용해서 http요청을 통해 CRUD 데이터 조작하기
+2. ### [PostMan](https://www.postman.com/downloads/)을 이용해서 http요청을 통해 CRUD 데이터 조작하기
 	```JSON
 	1. C : POST -> url : localhost:8080/api/boards -> body : raw(JSON)으로  데이터 입력 후 **Send**
 	2. R : GET -> url : localhost:8080/api/boards -> **Send**
 	3. U : PUT -> url : localhost:8080/api/boards/17 -> body : raw(JSON)에서 수정할 데이터 입력 후 **Send**
 	4. D : DELETE -> url : localhost:8080/api/boards/17 -> **Send**
 	```
-3. 정리
-	1. RestAPI
+3. ### 정리
+	1. #### RestAPI
 	- EndPoint (API가 서버에서 리소스에 접근할 수 있도록 가능하게 하는 URL)
 
 	| Methods | Urls | Actions |
@@ -242,7 +253,7 @@
 	| PUT | /api/boards{id} | 해당 id에 맞는 게시글 수정 |
 	| DELETE | /api/boards{id} | 해당 id에 맞는 게시글 삭제 |
 
-	2. **Spring에서 Controller의 전달인자 2가지 사용방법** (복합적으로 사용도 가능하다)
+	2. #### Spring에서 Controller의 전달인자 2가지 사용방법 (복합적으로 사용도 가능하다)
 		1. Type 1 => http://localhost8080/api/boards?title=123123&content=내용
 			- 매개변수단에 **@RequestParam** 사용
 			- 파라미터의 이름(ex>title)과 값(ex>123123)을 함께 전달
@@ -273,7 +284,7 @@
 			   return repository.findById(id).orElse(null);
 			}			
 			```
-	3. 참고
+	3. #### 참고
 		- **요청 본문(Body)에 들어있는 데이터 받기**
 			- 매개변수단에 **@RequestBody** 이용
 			1. postman 에서 POST 전송
@@ -291,7 +302,7 @@
 ---
 ##### 사용자 테이블을 만들고 Spring Security를 적용 -> 인증 및 권한 처리, 로그인, 회원가입, 로그아웃, 페이지 권한 처리
 ---
-1. pom.xml의 Spring Security 의존성추가 [참고](https://spring.io/guides/gs/securing-web/)
+1. ### pom.xml의 Spring Security 의존성추가 [참고](https://spring.io/guides/gs/securing-web/)
 	```xml
 	<dependency>
 	  <groupId>org.springframework.boot</groupId>
@@ -304,7 +315,7 @@
 	</dependency>
 	```
 
-2. WebSecurityConfigurerAdapter를 상속받은 클래스(WebSecurityConfig)를 구현하여 Security이용하기
+2. ### WebSecurityConfigurerAdapter를 상속받은 클래스(WebSecurityConfig)를 구현하여 Security이용하기
 	- **Access 관련 부분은 모두 여기에 설정**
 	```java
 	@Override
@@ -325,16 +336,18 @@
                 }
 	```
 
-3. DB 사용자,권한 테이블 생성 **user_role : User와 Role테이블 ManyToMany**
+3. ### DB 사용자,권한 테이블 생성 **user_role : User와 Role테이블 ManyToMany**
+	```java
 	- user(id,username,password,enabled) [ PK : id ]
 	- role(id, name) [PK : id]
 	- user_role(user_id,role_id) [PK : user_id,role_id], [FK : user_id(user참조), role_id(role참조)]
+	```	
 
-4. JDBC mysql 인증 설정 [샘플예제참고](https://www.baeldung.com/spring-security-jdbc-authentication)
-	- *시큐리티에서 사용자, 권한 관련 DB는 Config 클래스에서 직접 처리
+4. ### JDBC mysql 인증 설정 [샘플예제참고](https://www.baeldung.com/spring-security-jdbc-authentication)
+	- #### *시큐리티에서 사용자, 권한 관련 DB는 Config 클래스에서 직접 처리
 		- 다른방법으로 @Service단에서 UserDetailsService 인터페이스를 구현하여 인증처리 가능
-	- **SecurityConfig에서 AuthenticationManagerBuilder를 주입해서 인증에 대한 처리**
-	- 만든 DB의 User테이블에 대해  jdbcAuthentication 설정
+	- #### **SecurityConfig에서 AuthenticationManagerBuilder를 주입해서 인증에 대한 처리**
+	- #### 만든 DB의 User테이블에 대해  jdbcAuthentication 설정
 	* 사용자가 입력한 id/pw와 DB(User테이블)의 내용을 비교
 	```java
 	@Autowired
@@ -378,9 +391,9 @@
 	  - 출력결과는  [사용자이름], [비밀번호], [Enabled] 3개를 순서대로 지정
 	```
 	
-5. 로그인 화면 만들기
-	- [login.html](https://getbootstrap.com/docs/4.4/examples/sign-in/)
-	- id와 pw 의 input에서 name 속성 추가 + [error처리 코드](https://spring.io/guides/gs/securing-web/) 추가
+5. ### 로그인 화면 만들기
+	- #### [login.html](https://getbootstrap.com/docs/4.4/examples/sign-in/)
+	- #### id와 pw 의 input에서 name 속성 추가 + [error처리 코드](https://spring.io/guides/gs/securing-web/) 추가
 	```html
 	<form class="form-signin" th:action="@{/account/login}" method="post">
 	  <!-- error처리-->
@@ -400,8 +413,8 @@
 		.
 	```
 	
-6. 회원 가입 화면 만들기
-	- register.html
+6. ### 회원 가입 화면 만들기
+	- #### register.html
 	```java
 	[에러발생]
 	: form에서 username과 password 받아서 db에 저장할때 발생
@@ -412,7 +425,7 @@
 	- User 테이블의 id 컬럼 AUTO_INCREMENT으로 수정
 	```
 
-7. Model class 만들기 [JPA 연관관계 매핑]
+7. ### Model class 만들기 [JPA 연관관계 매핑]
 
 	- @JoinTable
 
@@ -431,8 +444,8 @@
 
 	- User, Role, 의 Model class 만들기 [ManyToMany의 user_role 이용](https://www.baeldung.com/jpa-many-to-many)
 
-8. 로그인 관리 하는 Controller 만들기
-	- AccountController
+8. ### 로그인 관리 하는 Controller 만들기
+	- #### AccountController
 	```java
                 @Controller
                 @RequestMapping("/account")
@@ -458,8 +471,8 @@
                     }
                 }
 	```
-8. Repository 만들기
-	- UserRepository
+8. ### Repository 만들기
+	- #### UserRepository
 	```java
                 @Repository
                 public interface UserRepository extends JpaRepository<User, Long> {
@@ -469,8 +482,8 @@
                 }
 	```
 
-9. 권한 및 패스워드 암호화를 하는 비지니스 로직이 필요하므로 Service  추가
-	- UserService 
+9. ### 권한 및 패스워드 암호화를 하는 비지니스 로직이 필요하므로 Service  추가
+	- #### UserService 
 	```java
                 @Service
                 public class UserService {
@@ -493,9 +506,9 @@
                 }
 	```
 
-10. 메인화면(common)에 [조건](https://www.thymeleaf.org/doc/articles/springsecurity.html)에 맞는 로그인/로그아웃 버튼 설정
-	- pom.xml 에 [Spring Security integration module](https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5/3.0.4.RELEASE) 의존성 추가
-	- common.html의 securitu namespace 추가
+10. ### 메인화면(common)에 [조건](https://www.thymeleaf.org/doc/articles/springsecurity.html)에 맞는 로그인/로그아웃 버튼 설정
+	- #### pom.xml 에 [Spring Security integration module](https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5/3.0.4.RELEASE) 의존성 추가
+	- #### common.html의 securitu namespace 추가
 	```html
 	<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 	```
@@ -550,8 +563,8 @@
 ---
 ##### One(게시자) To Many(게시글) 
 ---
-1. @ManyToOne 어노테이션을 이용하여 Board 조회시 User테이블 조회 하도록 설정하기
-	1. Board클래스의 User필드 추가
+1. ### @ManyToOne 어노테이션을 이용하여 Board 조회시 User테이블 조회 하도록 설정하기
+	1. #### Board클래스의 User필드 추가
 	```java
 	@ManyToOne
 	//이때 name은 어떠한 col이 User테이블과 연결이 될지결정,
@@ -559,9 +572,9 @@
 	//해당 변수는 board의 id와 연결된 user객체를 의미
     	private User user;
 	```
-	2. Board 테이블에서 User테이블과 연결될 **user_id** 컬럼 추가 
-	  (해당컬럼은 FK으로 user테이블의 id값 참조)
-	3. list.html에서 작성자 부분에 타임리프 board.user_id 추가
+	2. #### Board 테이블에서 User테이블과 연결될 **user_id** 컬럼 추가 
+		- (해당컬럼은 FK으로 user테이블의 id값 참조)
+	3. #### list.html에서 작성자 부분에 타임리프 board.user_id 추가
 	```html
 	list.html 파싱할때 에러발생
 	[에러문구]
@@ -577,7 +590,7 @@
      	   	this.user = user;
     	} 
 	```
-2. 게시판의 글 작성시 작성자의 로그인한 username들어가도록 설정
+2. ### 게시판의 글 작성시 작성자의 로그인한 username들어가도록 설정
 	```java
 	form에서 user_id를 직접 전달 하게 되면 다른사람이 개발자도구를 활용해서 다른사람의 user_id를 보낼 수 있다 
 	-> 사용자가보낸 인증정보는 절대 믿어선 안되므로 서버쪽에서 가지고 있는 인증 정보를 활용해야한다 
@@ -597,12 +610,12 @@
 		    String user_name = a.getName();
 		```
 
-	1. Controller에서 현재 사용자의 username을 Authentication을 이용하여 받고 이를 service를 통해 저장 
-	2. BoardService 만들어서 username과 board를 매개변수로 받고 username에서 user찾아서 Board에 넣는다
-	3. BoardRepository에서 해당 board 저장 
+	1. #### Controller에서 현재 사용자의 username을 Authentication을 이용하여 받고 이를 service를 통해 저장 
+	2. #### BoardService 만들어서 username과 board를 매개변수로 받고 username에서 user찾아서 Board에 넣는다
+	3. #### BoardRepository에서 해당 board 저장 
 	
-3. @OneToMany, @ManyToOne 어노테이션을 이용하여 양방향 매핑 설정
-4. Cascade, OrphanRemoval 속성을 이용하여 매핑된 데이터 조작
+3. ### @OneToMany, @ManyToOne 어노테이션을 이용하여 양방향 매핑 설정
+4. ### Cascade, OrphanRemoval 속성을 이용하여 매핑된 데이터 조작
 	
 	
 	
