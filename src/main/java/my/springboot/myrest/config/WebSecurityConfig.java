@@ -43,7 +43,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .and()//이어서
                 .logout()//로그아웃
                     .permitAll();
-
     }
 
 

@@ -11,7 +11,7 @@
 6. #### [JPA를 이용한 페이지 처리 및 검색](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#6-jpa를-이용한-페이지-처리-및-검색)
 7. #### [JPA이용한 RESTful API 작성](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#7-jpa이용한-restful-api-작성)
 8. #### [Spring Security 활용해서 login,register,logout](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#8-spring-security-활용해서-loginregisterlogout)
-9. #### [JPA를 이용하여 @OneToMany 관계 설정과 Cascade, OrphanRemoval 속성 활용](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#9-jpa를-이용하여-onetomany-관계-설정과-CascadeOrphanRemoval-속성-활용)
+9. #### [JPA를 이용하여 @OneToMany 관계 설정과 Cascade, OrphanRemoval 속성 활용](https://github.com/hwangyoungjin/Spring-Boot-Personal_Project#9-jpa를-이용하여-onetomany-관계-설정과-Cascade-OrphanRemoval-속성-활용)
 10. 
 ---
 [1.Spring Boot 환경세팅]
@@ -586,7 +586,8 @@
 	* form에서 작성자(username)를 컨트롤러에게 파라미터로 직접 전달 하게 되면 
 	  다른사람이 개발자 도구를 활용해서 다른사람의 username를 보낼 수 있다. 
 	-> 사용자가보낸 인증정보는 절대 믿어선 안되므로 서버쪽에서 가지고 있는 인증 정보를 활용해야 한다 
-	-> Controller에서 SpringSecurity를 활용하여 username 받아온다. 
+	-> Controller에서 파라미터로 username을 받는것이 아닌
+	    Controller에서 SpringSecurity를 활용하여 현재 인증된 user의 username 받아온다. 
 	```
 	- cf.현재 로그인 한 사용자 정보 받아오기 2개 방법 [Spring Security의 Authentication 활용](https://dzone.com/articles/how-to-get-current-logged-in-username-in-spring-se)
 		```java
