@@ -22,5 +22,4 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     //파라미터와 일치하는 데이터 page로 반환
     Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
 
-
 }

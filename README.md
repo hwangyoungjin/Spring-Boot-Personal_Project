@@ -814,4 +814,12 @@
 	- CascadeType.ALL + orphanRemovel=true 이 두개를 같이 사용하게 되면 부모 엔티티가 자식의 생명주기를 모두 관리 
 	```
 	
-	
+---
+### feature/step01
+	1. #### 환경설정 변경
+	```java
+	* datasource username : root
+	* mysql version : 8.0.23
+	* jdk 11
+	```
+		
