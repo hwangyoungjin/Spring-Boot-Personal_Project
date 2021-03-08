@@ -816,7 +816,7 @@
 	
 ---
 ### feature/step01
-	1. #### 환경설정 변경
+1. #### 환경설정 변경
 	```java
 	* datasource username : root
 	* mysql version : 8.0.23
