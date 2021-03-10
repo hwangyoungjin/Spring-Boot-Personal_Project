@@ -1,6 +1,7 @@
 package my.springboot.myrest.config;
 
 
+import my.springboot.myrest.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,27 +47,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    /**
-     * 참고
-     * Authentication : 로그인의 관한 설정
-     * Authroization : 권한의 관한 설정
-     */
     @Autowired
-    //만든 User테이블을 AuthenticationManagerBuilder 설정을 통해 스프링이 알아서 인증처리
-    public void configureGlobal(AuthenticationManagerBuilder auth)
-            throws Exception {
-         auth.jdbcAuthentication() // 로그인설정
-                .dataSource(dataSource) //스프링이 해당 dataSource를 사용하여 인증처리
-                .passwordEncoder(passwordEncoder()) // 스프링에서 제공하는 passwordEncoder 적용하여 알아서 pw 암호화
-                .usersByUsernameQuery("select username, password, enabled " 
-                        + "from user "
-                        + "where username = ?") // 파라미터에 알아서 username이 들어간다.
-                .authoritiesByUsernameQuery("select u.username, r.name " //권한의 관한 설점
-                        + "from user_role as ur "
-                        + "inner join user as u on ur.user_id = u.id "
-                        + "inner join role as r on ur.role_id = r.id "
-                        + "where u.username = ? ");
+    UserService userService;
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userService);
     }
+
+//    /**
+//     * 참고
+//     * Authentication : 로그인의 관한 설정
+//     * Authroization : 권한의 관한 설정
+//     */
+//    @Autowired
+//    //만든 User테이블을 AuthenticationManagerBuilder 설정을 통해 스프링이 알아서 인증처리
+//    public void configureGlobal(AuthenticationManagerBuilder auth)
+//            throws Exception {
+//         auth.jdbcAuthentication() // 로그인설정
+//                .dataSource(dataSource) //스프링이 해당 dataSource를 사용하여 인증처리
+//                .passwordEncoder(passwordEncoder()) // 스프링에서 제공하는 passwordEncoder 적용하여 알아서 pw 암호화
+//                .usersByUsernameQuery("select username, password, enabled "
+//                        + "from user "
+//                        + "where username = ?") // 파라미터에 알아서 username이 들어간다.
+//                .authoritiesByUsernameQuery("select u.username, r.name " //권한의 관한 설점
+//                        + "from user_role as ur "
+//                        + "inner join user as u on ur.user_id = u.id "
+//                        + "inner join role as r on ur.role_id = r.id "
+//                        + "where u.username = ? ");
+//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

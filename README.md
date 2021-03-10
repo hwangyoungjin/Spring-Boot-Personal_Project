@@ -822,4 +822,87 @@
 	* mysql version : 8.0.23
 	* jdk 11
 	```
+2. #### [Lombok의존성추가](https://gmlwjd9405.github.io/2018/11/29/intellij-lombok.html)
+3. #### Model의 @JsonIgnore 삭제
+---
+### Security 설정 변경
+1. #### UserDetails 인터페이스 구현체인 User 상송받아 클래스 생성
+	```java
+	@Data
+	public class AccountContext extends User {
+		/**
+		* 나중의 User상속받을 수 있도록
+		*/
+		private final my.springboot.myrest.model.User user;
+
+		public AccountContext(my.springboot.myrest.model.User myuser,
+							Collection<? extends GrantedAuthority> authorities, my.springboot.myrest.model.User user) {
+			super(myuser.getUsername(),myuser.getPassword(), authorities);
+			this.user = user;
+		}
+	}
+	```
+
+2. #### 기존 UserService UserDetailsService 상속받기
+	```java
+    
+	
+	@Service
+	public class UserService implements UserDetailsService {
 		
+		//로그인 부분 수정
+
+
+		/**
+    	 * 로그인시 인증처리
+    	 */
+		@Override
+		public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+			List<User> users = userRepository.findByUsernameWithRole(s);
+
+			User user = users.get(0);
+
+			//존재하지않는경우
+			if(user == null){
+				throw new UsernameNotFoundException("UsernameNotFoundException");
+			}
+
+
+			//존재하는경우 권한 설정
+			List<GrantedAuthority> roles = user.getRoles().stream()
+					.map(role ->new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+
+
+			//UserDetails 타입 객체 만들어서 반환
+			AccountContext accountContext = new AccountContext(user,roles);
+			return accountContext;
+		}
+	}
+	```
+3. #### Config 클래스 수정
+	```java
+	1. configureGlobal 지우기
+	2. 내가만든 UserService  추가
+	
+	@Autowired
+    UserService userService;
+    
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userService);
+    }
+	```
+4. #### User의 role이 LAZY이므로 UserRepository의 fetch Join 추가
+	```java
+    @Query("select u from User u join fetch u.roles r where u.username = ?1")
+    public List<User> findByUsernameWithRole(String username);
+	```
+
+---
+### 이메일 인증하기
+	1. ### 이메일 관련 라이브러리 추가
+	```java
+
+	```
+
+
